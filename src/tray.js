@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { PRODUCTS, byId, IG_HANDLE } from './data.js';
+import { byId, IG_HANDLE } from './data.js';
 
 const KEY = 'rj-tray-v1';
 const state = new Map(); // id -> qty
@@ -44,7 +44,7 @@ function render() {
   $('[data-tray-empty]').hidden = n > 0;
   $('[data-tray-form]').hidden = n === 0 || !$('[data-tray-done]').hidden;
   if (n === 0) $('[data-tray-done]').hidden = true;
-  $$('.card__add').forEach((b) => b.classList.toggle('is-added', state.has(b.dataset.add)));
+  $$('[data-add]').forEach((b) => b.classList.toggle('is-added', state.has(b.dataset.add)));
 }
 
 function flyFrom(el, id) {
@@ -152,24 +152,9 @@ export function initTray(lenis) {
   lenisRef = lenis;
   load();
 
-  // build the counter
-  const ul = $('[data-products]');
-  ul.innerHTML = PRODUCTS.map((p) => `
-    <li class="card" data-cat="${p.cat}">
-      <div class="card__media">
-        <img src="${p.img}" alt="${p.alt}" loading="lazy" width="512" height="640">
-        ${p.tag ? `<span class="card__tag">${p.tag}</span>` : ''}
-      </div>
-      <div class="card__body">
-        <h3 class="card__name">${p.name}</h3>
-        <p class="card__note">${p.note}</p>
-        <button class="card__add" type="button" data-add="${p.id}" aria-label="Add ${p.name} to your tray" data-cursor="Add">+</button>
-      </div>
-    </li>`).join('');
-
   document.addEventListener('click', (e) => {
     const a = e.target.closest('[data-add]');
-    if (a) { add(a.dataset.add, a.closest('.card')?.querySelector('img') || a); return; }
+    if (a) { add(a.dataset.add, a.closest('[data-item]')?.querySelector('img') || a); return; }
     if (e.target.closest('[data-open-tray]')) { e.preventDefault(); open(); return; }
     const c = e.target.closest('[data-close-tray]');
     if (c) { close(); if (c.tagName === 'A') { e.preventDefault(); setTimeout(() => lenisRef ? lenisRef.scrollTo('#counter') : document.querySelector('#counter').scrollIntoView(), 480); } return; }
@@ -204,18 +189,6 @@ export function initTray(lenis) {
   });
   $('[data-edit-tray]').addEventListener('click', () => { $('[data-tray-done]').hidden = true; form.hidden = false; form.elements.name.focus(); });
   form.elements.when.min = new Date().toISOString().slice(0, 10);
-
-  // filters
-  $$('[data-filter]').forEach((chip) => chip.addEventListener('click', () => {
-    $$('[data-filter]').forEach((c) => { c.classList.toggle('is-on', c === chip); c.setAttribute('aria-pressed', String(c === chip)); });
-    const f = chip.dataset.filter;
-    const cards = $$('.card');
-    gsap.to(cards, { opacity: 0, y: 20, duration: 0.2, stagger: 0.015, onComplete: () => {
-      cards.forEach((c) => c.classList.toggle('is-out', f !== 'all' && c.dataset.cat !== f));
-      $('[data-rail]').scrollTo({ left: 0 });
-      gsap.fromTo(cards.filter((c) => !c.classList.contains('is-out')), { opacity: 0, y: 40, rotate: 2 }, { opacity: 1, y: 0, rotate: 0, duration: 0.7, stagger: 0.06, ease: 'expo.out' });
-    } });
-  }));
 
   render();
 }

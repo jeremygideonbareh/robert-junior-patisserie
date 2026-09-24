@@ -46,7 +46,7 @@
       <span class="nav__rj">RJ</span><span class="nav__name">Robert Junior<small>Pâtisserie · Shillong</small></span>
     </a>
     <nav class="nav__links" aria-label="Sections">
-      <a href="#dough">Our craft</a>
+      <a href="#story">Our kitchen</a>
       <a href="#counter">The counter</a>
       <a href="#visit">Visit</a>
     </nav>
@@ -68,7 +68,7 @@
         <p class="hero__sub">Butter-laminated croissants, raspberry vanilla tarts and custard berliners, baked in small batches for people who notice the layers.</p>
         <div class="hero__ctas">
           <a class="btn btn--butter magnetic" href="#counter" data-cursor="Order">Build your tray <span class="btn__arrow" aria-hidden="true">→</span></a>
-          <a class="btn btn--ghost magnetic" href="#dough">See how it's made</a>
+          <a class="btn btn--ghost magnetic" href="#story">See how it's made</a>
         </div>
       </div>
       <ul class="hero__notes" aria-hidden="true">
@@ -99,183 +99,167 @@
           <button class="btn btn--butter magnetic" type="button" data-add="raspberry-vanilla-tart">Add to tray <span class="btn__arrow" aria-hidden="true">+</span></button>
         </div>
         <div class="seq__meter" aria-hidden="true"><span data-seq-frame>01</span> / 96</div>
-      </div>
-    </section>
-
-    <!-- ============ THE DOUGH (pinned) ============ -->
-    <section class="dough" id="dough" data-bg="#22060a" data-fg="#f3e8d6" data-title="Proofing">
-      <div class="dough__pin">
-        <p class="eyebrow dough__eyebrow">Chapter 01 · The dough</p>
-        <div class="dough__days">
-          <article class="day" data-day="0">
-            <p class="day__n">Day 01</p>
-            <h2 class="day__t">Dough <em>rests.</em></h2>
-            <p class="day__p">Flour, milk, a little sugar. Mixed, then left cold overnight so the flavour has time to come in.</p>
-          </article>
-          <article class="day" data-day="1">
-            <p class="day__n">Day 02</p>
-            <h2 class="day__t">Butter <em>folds.</em></h2>
-            <p class="day__p">A block of cold butter, folded in and rolled out again and again until one sheet becomes dozens of thin layers.</p>
-          </article>
-          <article class="day" data-day="2">
-            <p class="day__n">Day 03</p>
-            <h2 class="day__t">Golden <em>layers.</em></h2>
-            <p class="day__p">Shaped, proofed and baked until the edges shatter. Gently baked with care, crafted to perfection.</p>
-          </article>
-        </div>
-        <div class="dough__progress" aria-hidden="true"><i></i></div>
-        <p class="dough__caption" aria-hidden="true"><span>Drag</span> the croissant · it's real 3D</p>
-      </div>
-    </section>
-
-    <!-- ============ NUMBERS ============ -->
-    <section class="numbers" id="numbers" data-bg="#f3e8d6" data-fg="#22060a" data-title="Baking">
-      <h2 class="numbers__title split">Small kitchen. <em>Serious</em> about butter.</h2>
-      <ul class="numbers__grid">
-        <li><span class="roll" data-roll="3">0</span><p>days from dough<br>to croissant</p></li>
-        <li><span class="roll" data-roll="27">0</span><p>layers of butter<br>in every fold</p></li>
-        <li><span class="roll" data-roll="2524">0</span><p>people follow<br>the bakes on Instagram <small>(Sept 2026)</small></p></li>
-        <li><span class="roll" data-roll="1">0</span><p>kitchen, right here<br>in Shillong</p></li>
-      </ul>
-    </section>
-
-    <!-- ============ PROCESS (horizontal) ============ -->
-    <section class="process" id="process" data-bg="#f3e8d6" data-fg="#22060a" data-title="Baking">
-      <div class="process__pin">
-        <div class="process__track">
-          <div class="process__intro">
-            <p class="eyebrow">Chapter 02 · The process</p>
-            <h2 class="process__title split">The process is just as <em>beautiful</em> as the result.</h2>
-            <p class="process__hint" aria-hidden="true">Keep scrolling <span>→</span></p>
+        <!-- bridge: the tart leaves the render and lands on the first plate of the counter -->
+        <div class="bridge" aria-hidden="true">
+          <span class="bridge__wipe"></span>
+          <div class="bridge__stage">
+            <span class="plate plate--bridge"><span class="plate__ring"></span></span>
+            <svg class="arc arc--bridge" viewBox="0 0 600 600"><path id="arc-bridge" d=""/><text><textPath href="#arc-bridge" startOffset="25%" text-anchor="middle">Fresh from the counter</textPath></text></svg>
           </div>
-          <figure class="panel panel--tall">
-            <div class="panel__media"><img src="img/reel-golden-layers.webp" alt="Rows of shaped croissants on a tray, ready for the oven" loading="lazy" width="360" height="640"></div>
-            <figcaption><span class="panel__n">i.</span> Shaped by hand, row by row.</figcaption>
-          </figure>
-          <figure class="panel panel--sq">
-            <div class="panel__media"><img src="img/reel-cake-process.webp" alt="A pavlova topped with strawberries, blueberries and gold leaf being cut" loading="lazy" width="640" height="600"></div>
-            <figcaption><span class="panel__n">ii.</span> Fruit, cream and a little gold.</figcaption>
-          </figure>
-          <figure class="panel panel--tall">
-            <div class="panel__media"><img src="img/chocolate-orange.webp" alt="A slice of layered chocolate orange cake with candied orange" loading="lazy" width="512" height="640"></div>
-            <figcaption><span class="panel__n">iii.</span> Orange, chocolate, and love.</figcaption>
-          </figure>
-          <figure class="panel panel--wide">
-            <div class="panel__media"><img src="img/views-berliners-tiramisu-eclairs.webp" alt="A berliner frying in oil beside a finished cream-filled berliner" loading="lazy" width="640" height="452"></div>
-            <figcaption><span class="panel__n">iv.</span> Fried, filled, finished.</figcaption>
-          </figure>
-          <figure class="panel panel--tall">
-            <div class="panel__media"><img src="img/almond-berry-croissant.webp" alt="Almond berry croissant labelled almond frangipani, berry gel and croissant dough" loading="lazy" width="512" height="640"></div>
-            <figcaption><span class="panel__n">v.</span> Something new, something old.</figcaption>
-          </figure>
-          <div class="process__end">
-            <p class="process__end-t">Now the <em>good</em> part.</p>
-            <a class="btn btn--oxblood magnetic" href="#counter">Choose your pastries <span class="btn__arrow" aria-hidden="true">↓</span></a>
-          </div>
+          <img class="bridge__tart" src="img/plate-tart.webp" alt="" width="900" height="900">
         </div>
       </div>
     </section>
 
-    <!-- ============ MARQUEE ============ -->
-    <section class="marquee" aria-label="Good day? Pastries. Bad day? Pastries. Tired? Pastries. Hungry? Pastries." data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Plating">
-      <div class="marquee__row" data-dir="1" aria-hidden="true">
-        <div class="marquee__inner"><span>Good day? <em>Pastries.</em></span><span>Bad day? <em>Pastries.</em></span><span>Good day? <em>Pastries.</em></span><span>Bad day? <em>Pastries.</em></span></div>
-      </div>
-      <div class="marquee__row marquee__row--outline" data-dir="-1" aria-hidden="true">
-        <div class="marquee__inner"><span>Tired? <em>Pastries.</em></span><span>Hungry? <em>Pastries.</em></span><span>Tired? <em>Pastries.</em></span><span>Hungry? <em>Pastries.</em></span></div>
+    <!-- ============ THE COUNTER: pinned plate carousel ============ -->
+    <section class="counter" id="counter" aria-labelledby="counter-title" data-title="Plating">
+      <div class="counter__sticky" data-counter>
+        <div class="counter__splash" data-splashes aria-hidden="true"></div>
+        <h2 class="visually-hidden" id="counter-title">Fresh from the counter</h2>
+        <svg class="arc arc--counter" viewBox="0 0 600 600" aria-hidden="true"><path id="arc-counter" d=""/><text><textPath href="#arc-counter" startOffset="25%" text-anchor="middle">Fresh from the counter</textPath></text></svg>
+        <ol class="counter__track" data-track></ol>
+        <p class="counter__index" aria-hidden="true"><span data-counter-i>01</span> / <span data-counter-n>06</span></p>
+        <p class="counter__hint" aria-hidden="true">Keep scrolling · tap <b>+</b> to add</p>
       </div>
     </section>
 
-    <!-- ============ THE COUNTER (menu) ============ -->
-    <section class="counter" id="counter" data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Plating">
-      <header class="counter__head">
-        <div>
-          <p class="eyebrow">Chapter 03 · The counter</p>
-          <h2 class="counter__title split">Pick what makes <em>today</em> better.</h2>
-        </div>
-        <div class="counter__side">
-          <ol class="how" aria-label="How ordering works">
-            <li><b>1</b><span>Add pastries <br>to your tray</span></li>
-            <li><b>2</b><span>Send it to us <br>in one DM</span></li>
-            <li><b>3</b><span>We confirm, <br>you pick up</span></li>
-          </ol>
-          <div class="chips" role="group" aria-label="Filter the counter">
-            <button class="chip is-on" type="button" data-filter="all" aria-pressed="true">All</button>
-            <button class="chip" type="button" data-filter="viennoiserie" aria-pressed="false">Viennoiserie</button>
-            <button class="chip" type="button" data-filter="tarts" aria-pressed="false">Tarts &amp; cakes</button>
-            <button class="chip" type="button" data-filter="chocolate" aria-pressed="false">Chocolate</button>
-            <button class="chip" type="button" data-filter="boxes" aria-pressed="false">Boxes</button>
-          </div>
-        </div>
+    <!-- ============ STORY: floating circles over morphing blobs ============ -->
+    <section class="story" id="story" data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Proofing">
+      <svg class="blob blob--story-a" data-blob="7" data-blob-amp=".22" viewBox="0 0 200 200" aria-hidden="true"><path/></svg>
+      <svg class="blob blob--story-b" data-blob="3" data-blob-amp=".18" viewBox="0 0 200 200" aria-hidden="true"><path/></svg>
+      <div class="floaters" aria-hidden="true">
+        <span class="floater f1" data-speed="90"><img src="img/reel-golden-layers.webp" alt="" loading="lazy"></span>
+        <span class="floater f2" data-speed="40"><img src="img/card-berliner.webp" alt="" loading="lazy"></span>
+        <span class="floater f3" data-speed="120"><img src="img/card-tiramisu.webp" alt="" loading="lazy"></span>
+        <span class="floater f4" data-speed="60"><img src="img/reel-cake-process.webp" alt="" loading="lazy"></span>
+        <span class="floater f5" data-speed="100"><img src="img/card-chocolate-orange.webp" alt="" loading="lazy"></span>
+      </div>
+      <div class="story__copy">
+        <p class="kicker" data-fx="fade-up"><i></i>Our kitchen<i></i></p>
+        <h2 class="story__title" data-fx="text">The process is just as beautiful as the result.</h2>
+        <p class="story__p" data-fx="fade-up">Dough rests overnight. Cold butter is folded in, again and again, until one sheet becomes dozens of thin layers. Then we shape, proof and bake until the edges shatter. Small batches, in Shillong, every day.</p>
+        <a class="btn btn--butter magnetic" href="#visit" data-fx="fade-up">How to order <span class="btn__arrow" aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <!-- ============ MARQUEE (reverses with scroll direction) ============ -->
+    <section class="band" aria-label="Good day? Pastries. Bad day? Pastries. Tired? Pastries. Hungry? Pastries.">
+      <div class="band__row" data-marquee aria-hidden="true">
+        <div class="band__inner"><span>Good day? <em>Pastries.</em></span><span>Bad day? <em>Pastries.</em></span><span>Tired? <em>Pastries.</em></span><span>Hungry? <em>Pastries.</em></span></div>
+      </div>
+    </section>
+
+    <!-- ============ NUMBERS: badges + photos, parallax ============ -->
+    <section class="badges" id="numbers" data-bg="#f3e8d6" data-fg="#22060a" data-title="Baking">
+      <svg class="blob blob--badges" data-blob="11" data-blob-amp=".2" viewBox="0 0 200 200" aria-hidden="true"><path/></svg>
+      <h2 class="visually-hidden">Robert Junior in numbers</h2>
+      <div class="badges__field">
+        <div class="badge b1" data-speed="60"><span class="badge__ring"></span><b data-count="3">3</b><small>days from dough<br>to croissant</small></div>
+        <span class="floater p1" data-speed="30" aria-hidden="true"><img src="img/almond-berry-croissant.webp" alt="" loading="lazy"></span>
+        <div class="badge b2" data-speed="110"><span class="badge__ring"></span><b data-count="27">27</b><small>layers of butter<br>in every fold</small></div>
+        <div class="badge b3" data-speed="20"><span class="badge__ring"></span><b data-count="2524">2,524</b><small>people follow the bakes<br>(Instagram, Sept 2026)</small></div>
+        <span class="floater p2" data-speed="90" aria-hidden="true"><img src="img/happiness-tray.webp" alt="" loading="lazy"></span>
+        <div class="badge b4" data-speed="80"><span class="badge__ring"></span><b data-count="1">1</b><small>kitchen, right here<br>in Shillong</small></div>
+      </div>
+    </section>
+
+    <!-- ============ CAME FOR / STAYED FOR + real posts ============ -->
+    <section class="posts" id="stayed" data-bg="#f3e8d6" data-fg="#22060a" data-title="Boxing">
+      <header class="posts__head">
+        <h2 class="posts__title">
+          <span>Came for the</span>
+          <span class="slot" data-slot="tiramisu,berliners,éclairs,croissants,raspberry tart"><span class="slot__w">tiramisu</span></span>
+          <span>stayed for the</span>
+          <span class="slot slot--2" data-slot="chocolate orange,pavlova,almond croissant,cupcakes,coffee"><span class="slot__w">chocolate orange</span></span>
+        </h2>
+        <p class="posts__aside" data-fx="fade-up">Straight from our Instagram. Tap a post to see it, or tell us what you stayed for at <a href="https://www.instagram.com/robertjuniorpatisserie/" target="_blank" rel="noopener">@robertjuniorpatisserie</a>.</p>
       </header>
-      <div class="rail" data-rail tabindex="0" aria-label="Pastries. Scroll or drag sideways.">
-        <ul class="rail__list" data-products></ul>
-      </div>
-      <div class="rail__bar" aria-hidden="true"><i data-rail-bar></i></div>
-    </section>
-
-    <!-- ============ OUR VIEW / YOUR VIEW ============ -->
-    <section class="views" id="views" data-bg="#f3e8d6" data-fg="#22060a" data-title="Boxing">
-      <div class="views__copy">
-        <p class="eyebrow">Chapter 04 · Two views</p>
-        <h2 class="views__title split">Different views, the <em>same</em> taste.</h2>
-        <p>Our view is flour on the bench at six in the morning. Yours is the tray on the table. Drag to trade places.</p>
-      </div>
-      <div class="compare" data-compare style="--pos:50%">
-        <img class="compare__img" src="img/happiness-tray.webp" alt="Your view: a tray of croissants, berliners, cookies and cruffins" loading="lazy" width="640" height="453">
-        <div class="compare__top">
-          <img class="compare__img" src="img/vanilla-berry-cupcake.webp" alt="Our view: cream being piped, batter being mixed, cupcakes being finished" loading="lazy" width="512" height="640">
-        </div>
-        <span class="compare__tag compare__tag--l">our view</span>
-        <span class="compare__tag compare__tag--r">your view</span>
-        <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Compare our view and your view" data-compare-range>
-        <span class="compare__handle" aria-hidden="true"><i>⟷</i></span>
-      </div>
-    </section>
-
-    <!-- ============ CAME FOR / STAYED FOR ============ -->
-    <section class="stayed" id="stayed" data-bg="#f3e8d6" data-fg="#22060a" data-title="Boxing">
-      <p class="stayed__line">
-        <span>Came for the</span>
-        <span class="slot" data-slot="tiramisu,berliners,éclairs,croissants,raspberry tart"><span class="slot__w">tiramisu</span></span>
-        <span>and stayed for the</span>
-        <span class="slot slot--2" data-slot="chocolate orange,pavlova,almond croissant,cupcakes,coffee"><span class="slot__w">chocolate orange</span></span>
-      </p>
-      <p class="stayed__ask">What did you stay for? Tell us on <a href="https://www.instagram.com/robertjuniorpatisserie/" target="_blank" rel="noopener">@robertjuniorpatisserie</a>.</p>
-      <div class="ig" aria-label="Recent posts from @robertjuniorpatisserie">
+      <div class="ig" data-rail tabindex="0" aria-label="Recent posts from @robertjuniorpatisserie. Scroll or drag sideways.">
         <div class="ig__track" data-ig></div>
       </div>
+      <div class="ig__nav" aria-hidden="true"><i data-rail-bar></i></div>
     </section>
 
-    <!-- ============ HAPPINESS TRAY CTA ============ -->
-    <section class="tray-cta" id="visit" data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Boxing">
-      <div class="tray-cta__pin">
-        <h2 class="tray-cta__title"><span class="line">If happiness</span><span class="line">was a <em>tray,</em></span><span class="line">this would be it.</span></h2>
-        <div class="tray-cta__actions">
-          <button class="btn btn--butter btn--xl magnetic" type="button" data-open-tray>Send my tray <span class="btn__arrow" aria-hidden="true">→</span></button>
-          <a class="btn btn--ghost magnetic" href="https://ig.me/m/robertjuniorpatisserie" target="_blank" rel="noopener">Ask about a custom cake</a>
+    <!-- ============ CELEBRATIONS: arch image ============ -->
+    <section class="arch" id="cakes" data-bg="#2b0a0f" data-fg="#f3e8d6" data-title="Piping">
+      <svg class="blob blob--arch" data-blob="5" data-blob-amp=".24" viewBox="0 0 200 200" aria-hidden="true"><path/></svg>
+      <div class="arch__copy">
+        <p class="kicker" data-fx="fade-up"><i></i>Custom orders</p>
+        <h2 class="arch__title" data-fx="text">Birthdays, weddings, just-because Tuesdays.</h2>
+        <p data-fx="fade-up">Tell us the day, the size and the flavour you're dreaming of. We'll sketch it, bake it, and have it boxed and ready for you in Shillong.</p>
+        <a class="btn btn--butter magnetic" href="https://ig.me/m/robertjuniorpatisserie" target="_blank" rel="noopener" data-fx="fade-up">Ask about a custom cake <span class="btn__arrow" aria-hidden="true">↗</span></a>
+      </div>
+      <figure class="arch__media" data-fx="zoom-out">
+        <div class="arch__frame" data-speed="40"><img src="img/coming-soon.webp" alt="Line drawing of a waitress carrying pastries up Robert Junior's red spiral staircase" loading="lazy" width="480" height="640"></div>
+      </figure>
+    </section>
+
+    <!-- ============ MADE IN SHILLONG: wide image + overlapping circle ============ -->
+    <section class="classic" id="visit" data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Boxing">
+      <svg class="blob blob--classic" data-blob="9" data-blob-amp=".2" viewBox="0 0 200 200" aria-hidden="true"><path/></svg>
+      <div class="classic__head">
+        <div>
+          <p class="kicker" data-fx="fade-up"><i></i>Pâtisserie · Shillong</p>
+          <h2 class="classic__title" data-fx="text">Something new, something old, something sweet.</h2>
         </div>
-        <dl class="visit">
-          <div><dt>Find us</dt><dd><a href="https://maps.app.goo.gl/72vAg6ZnCkg9wxJ76" target="_blank" rel="noopener">Shillong, Meghalaya ↗</a></dd></div>
-          <div><dt>Also at</dt><dd><a href="https://www.instagram.com/robert.junior.restaurant/" target="_blank" rel="noopener">Robert Junior Restaurant ↗</a></dd></div>
-          <div><dt>Orders</dt><dd>Made to order · DM or tray</dd></div>
-        </dl>
+        <div class="classic__side">
+          <p data-fx="fade-up">European pâtisserie, made by hand in Meghalaya. Find us in Shillong, or pick up our pastries at Robert Junior Restaurant.</p>
+          <a class="btn btn--ghost magnetic" href="https://maps.app.goo.gl/72vAg6ZnCkg9wxJ76" target="_blank" rel="noopener" data-fx="fade-up">Open in Maps <span class="btn__arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="classic__gallery">
+        <figure class="classic__wide" data-speed="30"><img src="img/happiness-tray.webp" alt="A tray of croissants, berliners, cookies and cruffins" loading="lazy" width="640" height="453"></figure>
+        <figure class="classic__round" data-speed="110"><img src="img/card-tiramisu.webp" alt="Tiramisu dusted with cocoa" loading="lazy" width="512" height="425"></figure>
+      </div>
+    </section>
+
+    <!-- ============ CTA: title + split cards with curved titles ============ -->
+    <section class="cta" data-bg="#f3e8d6" data-fg="#22060a" data-title="Boxing">
+      <div class="cta__head">
+        <h2 class="cta__title" data-fx="text">If happiness was a tray, this would be it.</h2>
+        <p class="cta__aside" data-fx="fade-up">Pick your pastries, send one message, pick them up fresh. That's the whole thing.</p>
+      </div>
+      <div class="cta__cards">
+        <article class="ccard ccard--rasp">
+          <div class="ccard__disc">
+            <svg class="arc arc--card" viewBox="0 0 600 600" aria-hidden="true"><path id="arc-c1" d=""/><text><textPath href="#arc-c1" startOffset="25%" text-anchor="middle">Order for pickup</textPath></text></svg>
+            <span class="ccard__img" data-spin><img src="img/almond-berry-croissant.webp" alt="" loading="lazy"></span>
+          </div>
+          <h3 class="visually-hidden">Order for pickup</h3>
+          <button class="btn btn--cream magnetic" type="button" data-open-tray>Build your tray <span class="btn__arrow" aria-hidden="true">→</span></button>
+        </article>
+        <article class="ccard ccard--butter">
+          <div class="ccard__disc">
+            <svg class="arc arc--card" viewBox="0 0 600 600" aria-hidden="true"><path id="arc-c2" d=""/><text><textPath href="#arc-c2" startOffset="25%" text-anchor="middle">Cakes to celebrate</textPath></text></svg>
+            <span class="ccard__img" data-spin><img src="img/card-chocolate-orange.webp" alt="" loading="lazy"></span>
+          </div>
+          <h3 class="visually-hidden">Cakes to celebrate</h3>
+          <a class="btn btn--oxblood magnetic" href="https://ig.me/m/robertjuniorpatisserie" target="_blank" rel="noopener">Message us <span class="btn__arrow" aria-hidden="true">↗</span></a>
+        </article>
       </div>
     </section>
   </main>
 
-  <!-- ============ FOOTER + GAME ============ -->
-  <footer class="footer" id="footer" data-bg="#22060a" data-fg="#f3e8d6" data-title="Catch one">
-    <div class="game" data-game>
-      <p class="game__score" aria-live="polite">Tray score <b data-score>0</b></p>
-      <button class="btn btn--butter magnetic game__play" type="button" data-play>Play: catch the pastries</button>
-      <p class="game__lives" data-lives aria-live="polite"></p>
-      <p class="game__hint">Move to steer the plate. Three drops and the kitchen closes.</p>
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" id="footer" data-bg="#5a0e16" data-fg="#f3e8d6" data-title="See you soon">
+    <svg class="blob blob--footer" data-blob="13" data-blob-amp=".18" viewBox="0 0 200 200" aria-hidden="true"><path/></svg>
+    <div class="footer__card" data-fx="fade-up">
+      <p class="footer__k">Orders</p>
+      <p class="footer__big">Made to order</p>
+      <p>Build a tray on this site or send us a DM. We reply to confirm your pickup time.</p>
+      <button class="btn btn--oxblood btn--block" type="button" data-open-tray>Your tray · <span data-tray-count>0</span> <span class="btn__arrow" aria-hidden="true">→</span></button>
     </div>
-    <p class="footer__mark" aria-hidden="true"><span>Robert</span><span><em>Junior</em></span></p>
+    <dl class="footer__info">
+      <div data-fx="fade-up"><dt>Find us</dt><dd><a href="https://maps.app.goo.gl/72vAg6ZnCkg9wxJ76" target="_blank" rel="noopener">Shillong, Meghalaya ↗</a></dd></div>
+      <div data-fx="fade-up"><dt>Also at</dt><dd><a href="https://www.instagram.com/robert.junior.restaurant/" target="_blank" rel="noopener">Robert Junior Restaurant ↗</a></dd></div>
+      <div data-fx="fade-up"><dt>Follow</dt><dd><a href="https://www.instagram.com/robertjuniorpatisserie/" target="_blank" rel="noopener">@robertjuniorpatisserie ↗</a><br><a href="https://www.instagram.com/beyond_byrobertjunior/" target="_blank" rel="noopener">Beyond by Robert Junior ↗</a></dd></div>
+    </dl>
+    <div class="stamp" aria-hidden="true">
+      <svg class="stamp__ring" viewBox="0 0 600 600"><path id="arc-stamp" d=""/><text><textPath href="#arc-stamp" startOffset="0%">Robert Junior · Pâtisserie · Shillong · Since the first batch ·</textPath></text></svg>
+      <span class="stamp__rj">RJ</span>
+    </div>
     <div class="footer__bar">
       <p>Pâtisserie · Shillong, Meghalaya</p>
-      <p><a href="https://www.instagram.com/robertjuniorpatisserie/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.instagram.com/beyond_byrobertjunior/" target="_blank" rel="noopener">Beyond by Robert Junior</a></p>
       <p class="footer__demo">Concept demo · photos © Robert Junior Pâtisserie</p>
     </div>
   </footer>

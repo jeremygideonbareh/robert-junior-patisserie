@@ -226,6 +226,7 @@ export async function initScene({ canvas, onProgress, lenis }) {
   // ---------- scroll keys ----------
   let keys = [];
   const dough = { a: 0, b: 1 };
+  let sleepAt = Infinity, asleep = false;
   function measure() {
     const vh = innerHeight;
     const top = (sel) => { const el = document.querySelector(sel); return el ? el.getBoundingClientRect().top + scrollY : 0; };
@@ -233,21 +234,9 @@ export async function initScene({ canvas, onProgress, lenis }) {
     keys = [
       { at: 0, pose: 'hero' },
       { at: top('#seq') + vh * 0.05, pose: 'seq' },
-      { at: bottom('#seq') - vh * 1.4, pose: 'seq' },
-      { at: top('#dough'), pose: 'dough' },
-      { at: bottom('#dough') - vh, pose: 'doughEnd' },
-      { at: top('#numbers') + vh * 0.2, pose: 'numbers' },
-      { at: top('#process'), pose: 'process' },
-      { at: bottom('#process') - vh, pose: 'processEnd' },
-      { at: top('.marquee') - vh * 0.1, pose: 'marquee' },
-      { at: top('#counter'), pose: 'counter' },
-      { at: top('#views'), pose: 'views' },
-      { at: top('#stayed') + vh * 0.1, pose: 'stayed' },
-      { at: top('#visit') - vh * 0.45, pose: 'visit' },
-      { at: top('#visit') + (bottom('#visit') - top('#visit') - vh) * 0.35, pose: 'visitEnd' },
-      { at: top('#footer') + vh * 0.2, pose: 'footer' },
-    ].sort((a, b) => a.at - b.at);
-    dough.a = top('#dough') - vh * 0.3; dough.b = bottom('#dough') - vh * 1.2;
+      ].sort((a, b) => a.at - b.at);
+    dough.a = -1e9; dough.b = -1e9 + 1; // no dough chapter any more: the croissant stays baked
+    sleepAt = top('#seq') + vh * 1.3;
   }
 
   const target = { x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0, s: 0 };
@@ -373,6 +362,10 @@ export async function initScene({ canvas, onProgress, lenis }) {
     const dt = Math.min((now - tPrev) / 1000, 0.05);
     tPrev = now; time += dt;
     const y = lenis ? lenis.animatedScroll : scrollY;
+    // after the tart the 3D pastries are gone: stop drawing entirely (big win on phones)
+    const sleep = y > sleepAt && !game.on;
+    if (sleep !== asleep) { asleep = sleep; canvas.style.visibility = sleep ? 'hidden' : ''; }
+    if (sleep) return;
     const v = lenis ? lenis.velocity : (y - lastScroll); lastScroll = y;
     vel = lerp(vel, v, 0.1);
     pointer.sx = lerp(pointer.sx, pointer.x, 0.06);

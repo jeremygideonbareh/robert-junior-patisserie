@@ -6,6 +6,7 @@ export function createSequence(canvas) {
   const ctx = canvas.getContext('2d');
   const frames = new Array(FRAME_COUNT);
   let current = -1, want = 0, loaded = 0, w = 0, h = 0;
+  const last = { dx: 0, dy: 0, s: 1 }; // where the frame was drawn, for the bridge hand-off
 
   function size() {
     const dpr = Math.min(devicePixelRatio, 2);
@@ -38,6 +39,7 @@ export function createSequence(canvas) {
     const dx = (w - dw) / 2 + (portrait ? 0 : w * 0.03);
     const dy = (h - dh) / 2 + (portrait ? -h * 0.12 : 0);
     ctx.drawImage(img, dx, dy, dw, dh);
+    last.dx = dx; last.dy = dy; last.s = s;
   }
 
   // first frame, then the rest in scroll order
@@ -61,5 +63,7 @@ export function createSequence(canvas) {
 
   addEventListener('resize', size);
   size();
-  return { load, draw, setProgress: (p) => draw(Math.round(p * (FRAME_COUNT - 1))) };
+  // tart in the final frame: centre (640, 459), square crop 758px (matches img/plate-tart.webp)
+  const tartRect = () => ({ cx: last.dx + 640 * last.s, cy: last.dy + 459 * last.s, size: 758 * last.s });
+  return { load, draw, tartRect, setProgress: (p) => draw(Math.round(p * (FRAME_COUNT - 1))) };
 }

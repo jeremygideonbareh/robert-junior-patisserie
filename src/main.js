@@ -19,7 +19,7 @@ scrollTo(0, 0);
 /* ---------- smooth scroll: Lenis is the only engine ---------- */
 let lenis = null;
 if (!reduced) {
-  lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.95, touchMultiplier: 1.3 });
+  lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, touchMultiplier: 1.2 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
