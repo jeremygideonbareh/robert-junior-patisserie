@@ -1,0 +1,8 @@
+node_modules/
+dist/
+# Blender PNG renders (55 MB) — regenerate with: blender -b blender/tart-sequence.blend -o //frames/f_#### -a
+blender/frames/
+blender/pastries-raw.glb
+# raw scrape images duplicate public/img
+research/instagram/
+research/contact-sheet.jpg

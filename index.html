@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Robert Junior Pâtisserie · Shillong</title>
+  <meta name="description" content="Croissants, tarts, berliners and tiramisu, baked in Shillong. Build your tray and order in one message." />
+  <meta name="theme-color" content="#5a0e16" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2232%22 fill=%22%235a0e16%22/%3E%3Ctext x=%2232%22 y=%2242%22 text-anchor=%22middle%22 font-family=%22Georgia%22 font-style=%22italic%22 font-size=%2228%22 fill=%22%23e8c47a%22%3ERJ%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Caveat:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>document.documentElement.classList.replace('no-js','js')</script>
+</head>
+<body>
+  <a class="skip" href="#counter">Skip to the menu</a>
+
+  <!-- ============ LOADER ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__curtain loader__curtain--top"></div>
+    <div class="loader__curtain loader__curtain--bot"></div>
+    <div class="loader__inner">
+      <p class="loader__brand">Robert Junior <em>Pâtisserie</em></p>
+      <div class="odo" data-odo>
+        <span class="odo__col"><span class="odo__strip">0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0</span></span>
+        <span class="odo__col"><span class="odo__strip">0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0</span></span>
+        <span class="odo__col"><span class="odo__strip">0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0</span></span>
+        <span class="odo__pct">%</span>
+      </div>
+      <p class="loader__status"><span data-status>Laminating</span>…</p>
+    </div>
+  </div>
+
+  <!-- ============ 3D ============ -->
+  <canvas class="gl" id="gl" aria-hidden="true"></canvas>
+  <img class="gl-poster" src="img/happiness-tray.webp" alt="" aria-hidden="true" />
+
+  <!-- ============ CURSOR ============ -->
+  <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__label" data-cursor-label></span></div>
+
+  <div class="progress" aria-hidden="true"><i data-progress></i></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <a class="nav__logo" href="#top" aria-label="Robert Junior Pâtisserie, back to top">
+      <span class="nav__rj">RJ</span><span class="nav__name">Robert Junior<small>Pâtisserie · Shillong</small></span>
+    </a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#dough">Our craft</a>
+      <a href="#counter">The counter</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <button class="nav__tray magnetic" type="button" data-open-tray aria-haspopup="dialog" aria-controls="tray">
+      <span>Your tray</span><span class="nav__count" data-tray-count aria-live="polite">0</span>
+    </button>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero" data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Laminating">
+      <div class="hero__copy">
+        <p class="eyebrow hero__eyebrow">Pâtisserie · Shillong, Meghalaya</p>
+        <h1 class="hero__title">
+          <span class="line">Good day?</span>
+          <span class="line"><em>Pastries.</em></span>
+        </h1>
+        <p class="hero__sub">Butter-laminated croissants, raspberry vanilla tarts and custard berliners, baked in small batches for people who notice the layers.</p>
+        <div class="hero__ctas">
+          <a class="btn btn--butter magnetic" href="#counter" data-cursor="Order">Build your tray <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost magnetic" href="#dough">See how it's made</a>
+        </div>
+      </div>
+      <ul class="hero__notes" aria-hidden="true">
+        <li class="note note--a">almond frangipani</li>
+        <li class="note note--b">berry gel</li>
+        <li class="note note--c">27 butter layers</li>
+      </ul>
+      <p class="hero__drag" aria-hidden="true"><span>Tip: click a pastry to flick it</span></p>
+      <div class="hero__scroll" aria-hidden="true"><span>Scroll</span><i></i></div>
+    </section>
+
+    <!-- ============ ASSEMBLY (Blender frame sequence, scroll-scrubbed) ============ -->
+    <section class="seq" id="seq" data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Piping">
+      <div class="seq__pin">
+        <canvas class="seq__canvas" data-seq aria-hidden="true"></canvas>
+        <img class="seq__poster" src="seq/f_0096.webp" alt="Raspberry vanilla tart with piped vanilla cream, blueberries and gold leaf" width="1280" height="800" loading="lazy">
+        <p class="seq__big" aria-hidden="true"><span>Raspberry</span><span>Vanilla</span></p>
+        <ol class="seq__steps">
+          <li class="step" data-step="0"><b>01</b><span>Bake the shell</span><small>Sweet pastry, fluted by hand, baked to a snap.</small></li>
+          <li class="step" data-step="1"><b>02</b><span>Pipe the vanilla</span><small>Light vanilla cream, piped in one slow spiral.</small></li>
+          <li class="step" data-step="2"><b>03</b><span>Crown the raspberry</span><small>The best berry of the box goes on top.</small></li>
+          <li class="step" data-step="3"><b>04</b><span>Finish in gold</span><small>Blueberries, then a whisper of gold leaf.</small></li>
+        </ol>
+        <div class="seq__product">
+          <p class="eyebrow">Our signature</p>
+          <h2 class="seq__name">Raspberry Vanilla <em>Tart</em></h2>
+          <p>A classic and a favourite at our bakery. Made with the best ingredients, available on order.</p>
+          <button class="btn btn--butter magnetic" type="button" data-add="raspberry-vanilla-tart">Add to tray <span class="btn__arrow" aria-hidden="true">+</span></button>
+        </div>
+        <div class="seq__meter" aria-hidden="true"><span data-seq-frame>01</span> / 96</div>
+      </div>
+    </section>
+
+    <!-- ============ THE DOUGH (pinned) ============ -->
+    <section class="dough" id="dough" data-bg="#22060a" data-fg="#f3e8d6" data-title="Proofing">
+      <div class="dough__pin">
+        <p class="eyebrow dough__eyebrow">Chapter 01 · The dough</p>
+        <div class="dough__days">
+          <article class="day" data-day="0">
+            <p class="day__n">Day 01</p>
+            <h2 class="day__t">Dough <em>rests.</em></h2>
+            <p class="day__p">Flour, milk, a little sugar. Mixed, then left cold overnight so the flavour has time to come in.</p>
+          </article>
+          <article class="day" data-day="1">
+            <p class="day__n">Day 02</p>
+            <h2 class="day__t">Butter <em>folds.</em></h2>
+            <p class="day__p">A block of cold butter, folded in and rolled out again and again until one sheet becomes dozens of thin layers.</p>
+          </article>
+          <article class="day" data-day="2">
+            <p class="day__n">Day 03</p>
+            <h2 class="day__t">Golden <em>layers.</em></h2>
+            <p class="day__p">Shaped, proofed and baked until the edges shatter. Gently baked with care, crafted to perfection.</p>
+          </article>
+        </div>
+        <div class="dough__progress" aria-hidden="true"><i></i></div>
+        <p class="dough__caption" aria-hidden="true"><span>Drag</span> the croissant · it's real 3D</p>
+      </div>
+    </section>
+
+    <!-- ============ NUMBERS ============ -->
+    <section class="numbers" id="numbers" data-bg="#f3e8d6" data-fg="#22060a" data-title="Baking">
+      <h2 class="numbers__title split">Small kitchen. <em>Serious</em> about butter.</h2>
+      <ul class="numbers__grid">
+        <li><span class="roll" data-roll="3">0</span><p>days from dough<br>to croissant</p></li>
+        <li><span class="roll" data-roll="27">0</span><p>layers of butter<br>in every fold</p></li>
+        <li><span class="roll" data-roll="2524">0</span><p>people follow<br>the bakes on Instagram <small>(Sept 2026)</small></p></li>
+        <li><span class="roll" data-roll="1">0</span><p>kitchen, right here<br>in Shillong</p></li>
+      </ul>
+    </section>
+
+    <!-- ============ PROCESS (horizontal) ============ -->
+    <section class="process" id="process" data-bg="#f3e8d6" data-fg="#22060a" data-title="Baking">
+      <div class="process__pin">
+        <div class="process__track">
+          <div class="process__intro">
+            <p class="eyebrow">Chapter 02 · The process</p>
+            <h2 class="process__title split">The process is just as <em>beautiful</em> as the result.</h2>
+            <p class="process__hint" aria-hidden="true">Keep scrolling <span>→</span></p>
+          </div>
+          <figure class="panel panel--tall">
+            <div class="panel__media"><img src="img/reel-golden-layers.webp" alt="Rows of shaped croissants on a tray, ready for the oven" loading="lazy" width="360" height="640"></div>
+            <figcaption><span class="panel__n">i.</span> Shaped by hand, row by row.</figcaption>
+          </figure>
+          <figure class="panel panel--sq">
+            <div class="panel__media"><img src="img/reel-cake-process.webp" alt="A pavlova topped with strawberries, blueberries and gold leaf being cut" loading="lazy" width="640" height="600"></div>
+            <figcaption><span class="panel__n">ii.</span> Fruit, cream and a little gold.</figcaption>
+          </figure>
+          <figure class="panel panel--tall">
+            <div class="panel__media"><img src="img/chocolate-orange.webp" alt="A slice of layered chocolate orange cake with candied orange" loading="lazy" width="512" height="640"></div>
+            <figcaption><span class="panel__n">iii.</span> Orange, chocolate, and love.</figcaption>
+          </figure>
+          <figure class="panel panel--wide">
+            <div class="panel__media"><img src="img/views-berliners-tiramisu-eclairs.webp" alt="A berliner frying in oil beside a finished cream-filled berliner" loading="lazy" width="640" height="452"></div>
+            <figcaption><span class="panel__n">iv.</span> Fried, filled, finished.</figcaption>
+          </figure>
+          <figure class="panel panel--tall">
+            <div class="panel__media"><img src="img/almond-berry-croissant.webp" alt="Almond berry croissant labelled almond frangipani, berry gel and croissant dough" loading="lazy" width="512" height="640"></div>
+            <figcaption><span class="panel__n">v.</span> Something new, something old.</figcaption>
+          </figure>
+          <div class="process__end">
+            <p class="process__end-t">Now the <em>good</em> part.</p>
+            <a class="btn btn--oxblood magnetic" href="#counter">Choose your pastries <span class="btn__arrow" aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <section class="marquee" aria-label="Good day? Pastries. Bad day? Pastries. Tired? Pastries. Hungry? Pastries." data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Plating">
+      <div class="marquee__row" data-dir="1" aria-hidden="true">
+        <div class="marquee__inner"><span>Good day? <em>Pastries.</em></span><span>Bad day? <em>Pastries.</em></span><span>Good day? <em>Pastries.</em></span><span>Bad day? <em>Pastries.</em></span></div>
+      </div>
+      <div class="marquee__row marquee__row--outline" data-dir="-1" aria-hidden="true">
+        <div class="marquee__inner"><span>Tired? <em>Pastries.</em></span><span>Hungry? <em>Pastries.</em></span><span>Tired? <em>Pastries.</em></span><span>Hungry? <em>Pastries.</em></span></div>
+      </div>
+    </section>
+
+    <!-- ============ THE COUNTER (menu) ============ -->
+    <section class="counter" id="counter" data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Plating">
+      <header class="counter__head">
+        <div>
+          <p class="eyebrow">Chapter 03 · The counter</p>
+          <h2 class="counter__title split">Pick what makes <em>today</em> better.</h2>
+        </div>
+        <div class="counter__side">
+          <ol class="how" aria-label="How ordering works">
+            <li><b>1</b><span>Add pastries <br>to your tray</span></li>
+            <li><b>2</b><span>Send it to us <br>in one DM</span></li>
+            <li><b>3</b><span>We confirm, <br>you pick up</span></li>
+          </ol>
+          <div class="chips" role="group" aria-label="Filter the counter">
+            <button class="chip is-on" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="chip" type="button" data-filter="viennoiserie" aria-pressed="false">Viennoiserie</button>
+            <button class="chip" type="button" data-filter="tarts" aria-pressed="false">Tarts &amp; cakes</button>
+            <button class="chip" type="button" data-filter="chocolate" aria-pressed="false">Chocolate</button>
+            <button class="chip" type="button" data-filter="boxes" aria-pressed="false">Boxes</button>
+          </div>
+        </div>
+      </header>
+      <div class="rail" data-rail tabindex="0" aria-label="Pastries. Scroll or drag sideways.">
+        <ul class="rail__list" data-products></ul>
+      </div>
+      <div class="rail__bar" aria-hidden="true"><i data-rail-bar></i></div>
+    </section>
+
+    <!-- ============ OUR VIEW / YOUR VIEW ============ -->
+    <section class="views" id="views" data-bg="#f3e8d6" data-fg="#22060a" data-title="Boxing">
+      <div class="views__copy">
+        <p class="eyebrow">Chapter 04 · Two views</p>
+        <h2 class="views__title split">Different views, the <em>same</em> taste.</h2>
+        <p>Our view is flour on the bench at six in the morning. Yours is the tray on the table. Drag to trade places.</p>
+      </div>
+      <div class="compare" data-compare style="--pos:50%">
+        <img class="compare__img" src="img/happiness-tray.webp" alt="Your view: a tray of croissants, berliners, cookies and cruffins" loading="lazy" width="640" height="453">
+        <div class="compare__top">
+          <img class="compare__img" src="img/vanilla-berry-cupcake.webp" alt="Our view: cream being piped, batter being mixed, cupcakes being finished" loading="lazy" width="512" height="640">
+        </div>
+        <span class="compare__tag compare__tag--l">our view</span>
+        <span class="compare__tag compare__tag--r">your view</span>
+        <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Compare our view and your view" data-compare-range>
+        <span class="compare__handle" aria-hidden="true"><i>⟷</i></span>
+      </div>
+    </section>
+
+    <!-- ============ CAME FOR / STAYED FOR ============ -->
+    <section class="stayed" id="stayed" data-bg="#f3e8d6" data-fg="#22060a" data-title="Boxing">
+      <p class="stayed__line">
+        <span>Came for the</span>
+        <span class="slot" data-slot="tiramisu,berliners,éclairs,croissants,raspberry tart"><span class="slot__w">tiramisu</span></span>
+        <span>and stayed for the</span>
+        <span class="slot slot--2" data-slot="chocolate orange,pavlova,almond croissant,cupcakes,coffee"><span class="slot__w">chocolate orange</span></span>
+      </p>
+      <p class="stayed__ask">What did you stay for? Tell us on <a href="https://www.instagram.com/robertjuniorpatisserie/" target="_blank" rel="noopener">@robertjuniorpatisserie</a>.</p>
+      <div class="ig" aria-label="Recent posts from @robertjuniorpatisserie">
+        <div class="ig__track" data-ig></div>
+      </div>
+    </section>
+
+    <!-- ============ HAPPINESS TRAY CTA ============ -->
+    <section class="tray-cta" id="visit" data-bg="#5a0e16" data-fg="#f3e8d6" data-title="Boxing">
+      <div class="tray-cta__pin">
+        <h2 class="tray-cta__title"><span class="line">If happiness</span><span class="line">was a <em>tray,</em></span><span class="line">this would be it.</span></h2>
+        <div class="tray-cta__actions">
+          <button class="btn btn--butter btn--xl magnetic" type="button" data-open-tray>Send my tray <span class="btn__arrow" aria-hidden="true">→</span></button>
+          <a class="btn btn--ghost magnetic" href="https://ig.me/m/robertjuniorpatisserie" target="_blank" rel="noopener">Ask about a custom cake</a>
+        </div>
+        <dl class="visit">
+          <div><dt>Find us</dt><dd><a href="https://maps.app.goo.gl/72vAg6ZnCkg9wxJ76" target="_blank" rel="noopener">Shillong, Meghalaya ↗</a></dd></div>
+          <div><dt>Also at</dt><dd><a href="https://www.instagram.com/robert.junior.restaurant/" target="_blank" rel="noopener">Robert Junior Restaurant ↗</a></dd></div>
+          <div><dt>Orders</dt><dd>Made to order · DM or tray</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER + GAME ============ -->
+  <footer class="footer" id="footer" data-bg="#22060a" data-fg="#f3e8d6" data-title="Catch one">
+    <div class="game" data-game>
+      <p class="game__score" aria-live="polite">Tray score <b data-score>0</b></p>
+      <button class="btn btn--butter magnetic game__play" type="button" data-play>Play: catch the pastries</button>
+      <p class="game__lives" data-lives aria-live="polite"></p>
+      <p class="game__hint">Move to steer the plate. Three drops and the kitchen closes.</p>
+    </div>
+    <p class="footer__mark" aria-hidden="true"><span>Robert</span><span><em>Junior</em></span></p>
+    <div class="footer__bar">
+      <p>Pâtisserie · Shillong, Meghalaya</p>
+      <p><a href="https://www.instagram.com/robertjuniorpatisserie/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.instagram.com/beyond_byrobertjunior/" target="_blank" rel="noopener">Beyond by Robert Junior</a></p>
+      <p class="footer__demo">Concept demo · photos © Robert Junior Pâtisserie</p>
+    </div>
+  </footer>
+
+  <!-- ============ TRAY DRAWER ============ -->
+  <div class="tray" id="tray" role="dialog" aria-modal="true" aria-labelledby="tray-title" hidden>
+    <div class="tray__scrim" data-close-tray></div>
+    <aside class="tray__panel">
+      <header class="tray__head">
+        <h2 id="tray-title">Your <em>tray</em></h2>
+        <button class="tray__x" type="button" data-close-tray aria-label="Close tray">✕</button>
+      </header>
+      <ul class="tray__list" data-tray-list></ul>
+      <p class="tray__empty" data-tray-empty>Your tray is empty. <a href="#counter" data-close-tray>Visit the counter →</a></p>
+      <form class="tray__form" data-tray-form novalidate>
+        <label>Your name<input name="name" autocomplete="name" required></label>
+        <label>Pickup day<input name="when" type="date" required></label>
+        <label>Anything else? <span>(optional)</span><textarea name="note" rows="2" placeholder="e.g. a birthday note on the tart"></textarea></label>
+        <p class="tray__err" data-tray-err role="alert"></p>
+        <button class="btn btn--butter btn--block" type="submit">Send order on Instagram <span class="btn__arrow" aria-hidden="true">→</span></button>
+        <p class="tray__fine">We copy your order for you. Then paste it into our Instagram DMs and we'll reply to confirm.</p>
+      </form>
+      <div class="tray__done" data-tray-done hidden>
+        <p class="tray__done-k">Order ready ✓</p>
+        <h3>Now send it to us</h3>
+        <ol class="tray__steps"><li>Your order is <b>copied</b>.</li><li>Open our Instagram DMs.</li><li>Paste and send. We reply to confirm pickup.</li></ol>
+        <pre class="tray__order" data-tray-order tabindex="0" aria-label="Your order text"></pre>
+        <a class="btn btn--butter btn--block" data-ig-link href="https://ig.me/m/robertjuniorpatisserie" target="_blank" rel="noopener">Open Instagram DMs <span class="btn__arrow" aria-hidden="true">↗</span></a>
+        <div class="tray__done-row">
+          <button class="btn btn--ghost" type="button" data-copy-again>Copy again</button>
+          <button class="btn btn--ghost" type="button" data-edit-tray>Edit tray</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+  <!-- mobile sticky order bar -->
+  <div class="mbar"><button class="btn btn--butter btn--block" type="button" data-open-tray>Your tray · <span data-tray-count>0</span> <span class="btn__arrow" aria-hidden="true">→</span></button></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
