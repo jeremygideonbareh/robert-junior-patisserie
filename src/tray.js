@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { byId, IG_HANDLE } from './data.js';
+import { PRODUCTS, byId, IG_HANDLE } from './data.js';
 
 const KEY = 'rj-tray-v1';
 const state = new Map(); // id -> qty
@@ -41,6 +41,9 @@ function render() {
       <div class="tline__qty"><button type="button" data-dec="${id}" aria-label="One less ${p.name}">−</button><output aria-label="${p.name} quantity">${q}</output><button type="button" data-inc="${id}" aria-label="One more ${p.name}">+</button></div>`;
     list.append(li);
   }
+  const more = PRODUCTS.filter((p) => !state.has(p.id)).slice(0, 3);
+  $('[data-tray-more]').hidden = n === 0 || !more.length || !$('[data-tray-done]').hidden;
+  $('[data-tray-more-list]').innerHTML = more.map((p) => `<li><button type="button" data-inc="${p.id}" aria-label="Add ${p.name}"><img src="${p.img}" alt="">+ ${p.name}</button></li>`).join('');
   $('[data-tray-empty]').hidden = n > 0;
   $('[data-tray-form]').hidden = n === 0 || !$('[data-tray-done]').hidden;
   if (n === 0) $('[data-tray-done]').hidden = true;

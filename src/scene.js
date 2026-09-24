@@ -379,7 +379,7 @@ export async function initScene({ canvas, onProgress, lenis }) {
       for (const p of ['x', 'y', 'z', 'rx', 'ry', 'rz', 's']) c[p] = lerp(c[p], t[p], k);
       // portrait: keep the hero cluster in the top half, clear of copy
       let px = c.x, py = c.y;
-      if (portrait && y < innerHeight) { px *= 0.98; py = 0.5 + py * 0.46; }
+      if (portrait && y < innerHeight) { px *= 0.9; py = 0.6 + py * 0.32; }
       const depth = 1 + c.z * 0.08;
       it.holder.position.set(px * halfW + pointer.sx * 0.25 * depth, py * halfH + pointer.sy * 0.18 * depth + Math.sin(time * 0.9 + it.phase) * 0.08, c.z);
       it.holder.rotation.set(c.rx + pointer.sy * 0.15, c.ry + pointer.sx * 0.25, c.rz);

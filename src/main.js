@@ -72,7 +72,9 @@ const sceneReady = reduced
       .then((s) => { scene = s; pModel = 1; bump(); })
       .catch((e) => { console.warn('3D disabled:', e); root.classList.add('no-webgl'); pModel = 1; bump(); });
 
-const minTime = new Promise((r) => setTimeout(r, reduced ? 0 : 1400));
+let seen = false;
+try { seen = sessionStorage.getItem('rj-seen') === '1'; sessionStorage.setItem('rj-seen', '1'); } catch { /* storage blocked */ }
+const minTime = new Promise((r) => setTimeout(r, reduced ? 0 : seen ? 500 : 1400));
 
 initMotion({ lenis, seq, reduced });
 ScrollTrigger.addEventListener('refresh', () => scene?.measure());

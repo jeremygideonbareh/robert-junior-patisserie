@@ -41,6 +41,7 @@ function themes() {
         const light = sec.dataset.bg.toLowerCase() === '#f3e8d6';
         gsap.to(document.body, { '--bg': sec.dataset.bg, '--fg': sec.dataset.fg, duration: 0.9, ease: 'power2.out', overwrite: 'auto' });
         document.body.dataset.theme = light ? 'light' : 'dark';
+        document.body.removeAttribute('data-gold');
         $('meta[name="theme-color"]').content = sec.dataset.bg;
         if (sec.dataset.title) document.title = `Robert Junior | ${sec.dataset.title}`;
       },
@@ -105,6 +106,7 @@ export function heroIntro() {
    .8 … 1   bridge: the tart leaves the render, lands on the first plate of the counter,
             while the first plate's colour circle-wipes in from the centre (Délice backsplash). */
 function sequence(seq) {
+  document.querySelector('.seq__product').inert = true;
   const pin = $('.seq__pin');
   const canvas = $('.seq__canvas');
   const steps = $$('.step');
@@ -145,7 +147,7 @@ function sequence(seq) {
     const a = clamp((bp - 0.58) / 0.3);
     gsap.set(arc, { opacity: a, rotation: -50 * (1 - a) });
     const dark = bp > 0.45;
-    if (dark !== fgDark) { fgDark = dark; gsap.to(document.body, { '--fg': dark ? PRODUCTS[0].ink : '#f3e8d6', duration: 0.5, overwrite: 'auto' }); }
+    if (dark !== fgDark) { fgDark = dark; document.body.toggleAttribute('data-gold', dark); gsap.to(document.body, { '--fg': dark ? PRODUCTS[0].ink : '#f3e8d6', duration: 0.5, overwrite: 'auto' }); }
   }
 
   ScrollTrigger.create({
@@ -159,10 +161,12 @@ function sequence(seq) {
       steps.forEach((el, i) => el.classList.toggle('is-on', i === s));
       const on = p > 0.58;
       if (on !== productOn) { productOn = on; on ? product.play() : product.reverse(); pin.classList.toggle('is-product', on); }
+      $('.seq__product').inert = !(on && p < 0.82);
       document.documentElement.classList.toggle('seq-product', on && p < 0.8 && self.isActive);
       bridge(clamp((p - 0.8) / 0.2));
     },
   });
+  gsap.fromTo('#gl', { opacity: 1 }, { opacity: 0, ease: 'none', scrollTrigger: { trigger: '#seq', start: 'top 70%', end: 'top 5%', scrub: true } });
   gsap.fromTo(big[0], { xPercent: -30 }, { xPercent: 20, ease: 'none', scrollTrigger: { trigger: '#seq', start: 'top bottom', end: '60% top', scrub: true } });
   gsap.fromTo(big[1], { xPercent: 30 }, { xPercent: -20, ease: 'none', scrollTrigger: { trigger: '#seq', start: 'top bottom', end: '60% top', scrub: true } });
   gsap.from('.seq__steps .step', { autoAlpha: 0, x: -40, stagger: 0.08, duration: 1, ease: 'expo.out', clearProps: 'opacity,visibility,transform', scrollTrigger: { trigger: '#seq', start: 'top 40%', toggleActions: 'play none none reverse' } });
@@ -200,6 +204,7 @@ function counter(lenis) {
     const p = PRODUCTS[i];
     sticky.style.setProperty('--ink', p.ink);
     sticky.style.setProperty('--bgc', p.bg);
+    document.body.toggleAttribute('data-gold', p.bg === '#e8c47a');
     gsap.to(document.body, { '--fg': p.ink, duration: 0.5, overwrite: 'auto' });
     $('[data-counter-i]').textContent = String(i + 1).padStart(2, '0');
     items.forEach((el, k) => el.classList.toggle('is-on', k === i));
@@ -216,18 +221,24 @@ function counter(lenis) {
   const st = ScrollTrigger.create({
     trigger: sec, start: 'top top', end: 'bottom bottom',
     onUpdate(self) {
-      const p = self.progress;
+      const s = self.progress * (n - 1);
+      const base = Math.min(Math.floor(s), n - 2);
+      const f = s - base;
+      const eased = base + gsap.parseEase('power2.inOut')(clamp((f - 0.25) / 0.5));
       const pitch = items[0].offsetWidth;
-      xTo(-p * (n - 1) * pitch);
-      rotTo.forEach((r, i) => r((i % 2 ? 1 : -1) * p * 180 * (n - 1) * (PRODUCTS[i].render ? 0.08 : 1)));
-      index = Math.round(p * (n - 1));
+      xTo(-eased * pitch);
+      // each plate swings as it passes the centre, never far enough to turn printed labels upside down
+      rotTo.forEach((r, i) => r((i % 2 ? 1 : -1) * gsap.utils.clamp(-1, 1, eased - i) * (PRODUCTS[i].render ? 8 : 28)));
+      index = Math.round(eased);
       if (index !== old) { swap(); old = index; }
     },
-    onToggle(self) { if (self.isActive) paint(index); },
-    onRefresh(self) { sticky.style.visibility = self.progress > 0 || self.isActive ? '' : 'hidden'; },
+    onToggle(self) { if (self.isActive) paint(index); else document.body.removeAttribute('data-gold'); },
   });
-  ScrollTrigger.create({ trigger: sec, start: 'top top', end: 'bottom top', onToggle: (self) => { sticky.style.visibility = self.isActive || self.progress >= 1 ? '' : 'hidden'; } });
-  sticky.style.visibility = 'hidden';
+  const show = (on) => { sticky.style.opacity = on ? '' : 0; sticky.style.pointerEvents = on ? '' : 'none'; };
+  ScrollTrigger.create({ trigger: sec, start: 'top top', end: 'bottom top', onToggle: (self) => show(self.isActive || self.progress >= 1) });
+  show(false);
+  // keyboard users land here even before it pins: reveal and scroll to it
+  sticky.addEventListener('focusin', () => { if (sticky.style.opacity === '0') { show(true); lenis ? lenis.scrollTo(sec, { duration: 0.8 }) : sec.scrollIntoView(); } });
   // first plate's text arrives as the bridge hands over
   gsap.from(items[0].querySelectorAll('.item__meta > *'), { y: 30, opacity: 0, stagger: 0.08, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: sec, start: 'top top', toggleActions: 'play none none reverse' } });
   gsap.from('.counter__index, .counter__hint', { opacity: 0, y: 20, duration: 0.8, scrollTrigger: { trigger: sec, start: 'top top', toggleActions: 'play none none reverse' } });
@@ -298,7 +309,7 @@ function badges() {
   gsap.from('.badge', { scale: 0.4, rotate: -30, opacity: 0, stagger: 0.12, duration: 1.4, ease: 'back.out(1.5)', scrollTrigger: { trigger: '.badges', start: 'top 70%' } });
   $$('.badge b').forEach((b) => {
     const to = +b.dataset.count; const o = { v: 0 };
-    ScrollTrigger.create({ trigger: b, start: 'top 85%', once: true, onEnter: () => gsap.to(o, { v: to, duration: 2, ease: 'expo.out', onUpdate: () => { b.textContent = Math.round(o.v).toLocaleString('en-IN'); } }) });
+    ScrollTrigger.create({ trigger: b, start: 'top 100%', once: true, onEnter: () => gsap.to(o, { v: to, duration: 1.4, ease: 'expo.out', onUpdate: () => { b.textContent = Math.round(o.v).toLocaleString('en-IN'); } }) });
   });
 }
 
