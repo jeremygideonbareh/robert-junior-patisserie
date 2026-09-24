@@ -233,22 +233,22 @@ section { position: relative; }
 
 /* ---------- bridge (inside the tart pin) ---------- */
 .bridge { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
-.bridge__wipe { position: absolute; left: 50%; top: var(--plate-y); width: var(--diag); aspect-ratio: 1; border-radius: 50%; background: var(--butter); translate: -50% -50%; transform: scale(0); }
+.bridge__wipe { position: absolute; left: calc(50% - var(--diag) / 2); top: calc(var(--plate-y) - var(--diag) / 2); width: var(--diag); height: var(--diag); border-radius: 50%; background: var(--butter); transform: scale(0); }
 .bridge__stage { position: absolute; left: 50%; top: var(--plate-y); width: var(--plate); aspect-ratio: 1; transform: translate(-50%, -50%); color: var(--night); }
 .bridge__tart { position: absolute; left: 0; top: 0; width: 100px; height: auto; opacity: 0; will-change: transform; }
 .plate { position: relative; display: block; width: 100%; aspect-ratio: 1; border-radius: 50%; background: var(--paper); box-shadow: 0 40px 80px -30px rgba(20, 3, 6, .5), inset 0 0 0 1px rgba(34, 6, 10, .06); }
 .plate__ring { position: absolute; inset: 9%; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(34, 6, 10, .1), inset 0 8px 20px rgba(34, 6, 10, .08); }
 .plate--bridge { transform: scale(0); }
-.arc--bridge, .arc--counter { width: calc(var(--plate) * 1.52); aspect-ratio: 1; left: 50%; top: 50%; translate: -50% -50%; }
+.arc--bridge, .arc--counter { width: calc(var(--plate) * 1.52); height: calc(var(--plate) * 1.52); left: calc(50% - var(--plate) * .76); top: calc(50% - var(--plate) * .76); }
 .arc--bridge { opacity: 0; }
 
 /* ---------- counter: pinned plate carousel ---------- */
 .counter { position: relative; z-index: 3; margin-top: -100vh; height: 420vh; }
 .counter__sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; color: var(--ink, var(--night)); transition: color .5s var(--ease); }
 .counter__splash { position: absolute; inset: 0; z-index: 0; }
-.splash { position: absolute; left: 50%; top: var(--plate-y); width: var(--diag); aspect-ratio: 1; border-radius: 50%; translate: -50% -50%; transform: scale(0); }
+.splash { position: absolute; left: calc(50% - var(--diag) / 2); top: calc(var(--plate-y) - var(--diag) / 2); width: var(--diag); height: var(--diag); border-radius: 50%; transform: scale(0); }
 .splash:first-child { transform: scale(1); }
-.arc--counter { top: var(--plate-y); z-index: 3; }
+.arc--counter { top: calc(var(--plate-y) - var(--plate) * .76); z-index: 3; }
 .counter__track { position: absolute; z-index: 1; top: calc(var(--plate-y) - var(--plate) / 2); left: 0; margin: 0; padding: 0 0 0 calc(50vw - var(--item) / 2); list-style: none; display: flex; will-change: transform; }
 .item { width: var(--item); flex: 0 0 auto; display: grid; justify-items: center; text-align: center; transition: opacity .5s var(--ease); }
 .item:not(.is-on) .item__meta { opacity: .35; }
@@ -360,7 +360,7 @@ section { position: relative; }
 .ccard--rasp { background: var(--rasp); color: var(--cream); }
 .ccard--butter { background: var(--butter); color: var(--night); }
 .ccard__disc { position: relative; width: clamp(14rem, 24vw, 22rem); aspect-ratio: 1; }
-.ccard__disc .arc { width: 150%; aspect-ratio: 1; left: 50%; top: 50%; translate: -50% -50%; }
+.ccard__disc .arc { width: 150%; height: 150%; left: -25%; top: -25%; }
 .ccard__img { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; border: .6rem solid var(--paper); box-shadow: 0 30px 60px -25px rgba(0,0,0,.45); }
 .ccard__img img { width: 100%; height: 100%; object-fit: cover; }
 
