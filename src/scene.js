@@ -141,7 +141,7 @@ export async function initScene({ canvas, onProgress, lenis }) {
   // ---------- load models ----------
   const loader = new GLTFLoader();
   loader.setMeshoptDecoder(MeshoptDecoder);
-  const gltf = await new Promise((res, rej) => loader.load('/models/pastries.opt.glb', res, (e) => e.total && onProgress?.(e.loaded / e.total), rej));
+  const gltf = await new Promise((res, rej) => loader.load('models/pastries.opt.glb', res, (e) => e.total && onProgress?.(e.loaded / e.total), rej));
 
   const tuned = new Map();
   const tune = (m, name) => {
