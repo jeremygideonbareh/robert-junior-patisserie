@@ -266,7 +266,7 @@ p { margin: 0 0 1em; }
 .counter__index { position: absolute; left: var(--pad); bottom: 2rem; margin: 0; font: italic 400 1.1rem/1 var(--serif); z-index: 2; }
 .counter__hint { position: absolute; right: var(--pad); bottom: 2rem; margin: 0; font: 600 .72rem/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; opacity: .7; z-index: 2; }
 .counter__hint b { font-size: 1rem; }
-.counter__doodle { position: absolute; z-index: 2; left: var(--pad); top: 6.5rem; width: 3.6rem; aspect-ratio: 210 / 220; background: currentColor; opacity: .85; -webkit-mask: var(--doodle) center / contain no-repeat; mask: var(--doodle) center / contain no-repeat; }
+.counter__doodle { position: absolute; z-index: 2; left: var(--pad); top: 6.5rem; width: 3.6rem; aspect-ratio: 210 / 220; background: currentColor; opacity: .85; -webkit-mask-position: center; mask-position: center; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
 
 /* ---------- band / marquee ---------- */
 .band { padding: clamp(1.5rem, 4vh, 3rem) 0; overflow: clip; position: relative; z-index: 2; background: var(--rasp); color: var(--cream); }
