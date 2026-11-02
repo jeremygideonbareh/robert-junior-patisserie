@@ -15,11 +15,11 @@ const chromeDir = fs.readdirSync(pwDir).filter((d) => /^chromium-\d+$/.test(d)).
 const executablePath = path.join(pwDir, chromeDir, 'chrome-win64', 'chrome.exe');
 
 const STOPS = [
-  ['01-hero', '#hero', 0], ['02-seq-10', '#seq', 0.08], ['03-seq-30', '#seq', 0.3], ['04-seq-50', '#seq', 0.5], ['05-seq-product', '#seq', 0.7],
-  ['06-bridge-85', '#seq', 0.85], ['07-bridge-92', '#seq', 0.92], ['08-bridge-100', '#seq', 1.0],
-  ['09-counter-0', '#counter', 0.02], ['10-counter-40', '#counter', 0.4], ['11-counter-100', '#counter', 0.99],
-  ['12-story', '#story', 0.35], ['13-band', '.band', 0.5], ['14-numbers', '#numbers', 0.35], ['15-posts', '#stayed', 0.3],
-  ['16-cakes', '#cakes', 0.35], ['17-visit', '#visit', 0.4], ['18-cta', '.cta', 0.45], ['19-footer', '#footer', 1],
+  ['01-hero', '.hero', 0], ['02-kitchen', '#kitchen', 0.3],
+  ['03-serve-00', '#serve', 0.0], ['04-serve-35', '#serve', 0.35], ['05-serve-55', '#serve', 0.55], ['06-serve-75', '#serve', 0.75], ['07-serve-100', '#serve', 1],
+  ['08-counter-00', '#counter', 0.0], ['09-counter-50', '#counter', 0.5], ['10-counter-100', '#counter', 1],
+  ['11-band', '.band', 0.4], ['12-numbers', '#numbers', 0.35], ['13-posts', '#stayed', 0.3], ['14-cakes', '#cakes', 0.35],
+  ['15-visit', '#visit', 0.4], ['16-cta', '.cta', 0.45], ['17-footer', '.footer', 1],
 ];
 
 const browser = await chromium.launch({ executablePath, args: ['--ignore-gpu-blocklist', '--enable-gpu-rasterization', '--use-angle=d3d11'] });
@@ -33,8 +33,8 @@ for (const name of which === 'both' ? ['desktop', 'mobile'] : [which]) {
   page.on('pageerror', (e) => errors.push(`[${name}] pageerror: ${e.message}`));
   await page.goto(url, { waitUntil: 'load' });
   await page.screenshot({ path: `${out}/${name}-00-loader.png` });
-  await page.waitForSelector('#loader.is-gone', { state: 'attached', timeout: 20000 }).catch(() => errors.push(`[${name}] loader never finished`));
-  await page.waitForTimeout(2600);
+  if (await page.$('#loader')) await page.waitForSelector('#loader.is-gone, #loader.is-done', { state: 'attached', timeout: 20000 }).catch(() => errors.push(`[${name}] loader never finished`));
+  await page.waitForTimeout(3200);
   for (const [label, sel, frac] of STOPS) {
     await page.evaluate(([sel, frac]) => {
       const el = document.querySelector(sel);

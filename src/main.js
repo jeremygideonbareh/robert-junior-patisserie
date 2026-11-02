@@ -1,107 +1,81 @@
 import './style.css';
-import Lenis from 'lenis';
-import { gsap, ScrollTrigger, initMotion, heroIntro, buildOdo } from './motion.js';
 import { initTray } from './tray.js';
-import { createSequence } from './sequence.js';
+import { waLink } from './data.js';
+import Lenis from 'lenis';
+import { initSecondHalf, gsap, ScrollTrigger } from './second-half.js';
 
-const root = document.documentElement;
-// Respect the OS setting, but let a visitor opt in (pill below, or ?motion=full) — remembered per browser.
-const params = new URLSearchParams(location.search);
-let optIn = params.get('motion') === 'full';
-try { if (optIn) localStorage.setItem('rj-motion', 'full'); optIn = optIn || localStorage.getItem('rj-motion') === 'full'; } catch { /* storage blocked */ }
-const osReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const reduced = osReduced && !optIn;
-const portrait = () => innerWidth / innerHeight < 0.8;
-if (reduced) root.classList.add('reduced');
-if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-scrollTo(0, 0);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-/* ---------- smooth scroll: Lenis is the only engine ---------- */
+// Calm by default for people who ask the OS for less motion; ?motion=full opts back in (demo convenience).
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches && new URLSearchParams(location.search).get('motion') !== 'full';
+document.documentElement.classList.toggle('still', reduced);
+
+/* ---------- WhatsApp: every enquiry goes there ---------- */
+$$('[data-wa]').forEach((a) => { a.href = waLink(a.dataset.waText); });
+
+initTray();
+
+/* ---------- smooth scroll (the second half's scrubbed chapters are built for it) ---------- */
 let lenis = null;
 if (!reduced) {
-  lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, touchMultiplier: 1.2 });
+  lenis = new Lenis({ lerp: 0.1 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
-  lenis.stop();
-  window.__lenis = lenis; // used by tools/capture.mjs
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    const t = a && a.getAttribute('href').length > 1 && document.querySelector(a.getAttribute('href'));
+    if (!t) return;
+    e.preventDefault();
+    lenis.scrollTo(t, { duration: 1.4 });
+  });
 }
+document.documentElement.classList.toggle('reduced', reduced);
+initSecondHalf({ lenis, reduced });
 
-initTray(lenis);
-
-/* ---------- loader ---------- */
-const loaderEl = document.getElementById('loader');
-const odoCols = buildOdo(loaderEl.querySelector('[data-odo]'), 3);
-loaderEl.querySelector('[data-odo]').insertAdjacentHTML('beforeend', '<span class="odo__pct">%</span>');
-const statusEl = loaderEl.querySelector('[data-status]');
-const stages = ['Laminating', 'Proofing', 'Baking', 'Piping', 'Plating'];
-const shown = { v: 0 };
-let real = 0;
-const setOdo = (v) => {
-  const n = Math.min(100, Math.round(v));
-  const s = String(n).padStart(3, '0');
-  // hundreds column only shows at 100, the rest roll continuously
-  odoCols[0].style.transform = `translateY(${-(+s[0])}em)`;
-  odoCols[1].style.transform = `translateY(${-(Math.floor(v / 10) % 10 + (v >= 100 ? 10 : 0))}em)`;
-  odoCols[2].style.transform = `translateY(${-(v % 10) - (v >= 100 ? 10 : 0)}em)`;
-  odoCols[0].parentElement.style.opacity = n >= 100 ? '1' : '0.25';
-  statusEl.textContent = stages[Math.min(stages.length - 1, Math.floor(n / 21))];
-  document.title = `Robert Junior | ${statusEl.textContent}`;
-};
-const odoTick = () => { shown.v += (real * 100 - shown.v) * 0.08; setOdo(shown.v); };
-gsap.ticker.add(odoTick);
-
-let pModel = 0, pFrames = 0;
-const bump = () => { real = Math.max(real, pModel * 0.45 + pFrames * 0.55); };
-
-/* ---------- 3D + sequence ---------- */
-const seqCanvas = document.querySelector('[data-seq]');
-const seq = reduced ? null : createSequence(seqCanvas);
-const framesReady = seq
-  ? new Promise((res) => {
-      let early = false;
-      seq.load((p) => { pFrames = Math.min(1, p / 0.35); bump(); if (p >= 0.35 && !early) { early = true; res(); } });
-    })
-  : Promise.resolve();
-
-let scene = null;
-const sceneReady = reduced
-  ? Promise.resolve()
-  : import('./scene.js')
-      .then(({ initScene }) => initScene({ canvas: document.getElementById('gl'), lenis, portrait: portrait(), onProgress: (p) => { pModel = p; bump(); } }))
-      .then((s) => { scene = s; pModel = 1; bump(); })
-      .catch((e) => { console.warn('3D disabled:', e); root.classList.add('no-webgl'); pModel = 1; bump(); });
-
-let seen = false;
-try { seen = sessionStorage.getItem('rj-seen') === '1'; sessionStorage.setItem('rj-seen', '1'); } catch { /* storage blocked */ }
-const minTime = new Promise((r) => setTimeout(r, reduced ? 0 : seen ? 500 : 1400));
-
-initMotion({ lenis, seq, reduced });
-ScrollTrigger.addEventListener('refresh', () => scene?.measure());
-document.fonts?.ready.then(() => ScrollTrigger.refresh());
-
-Promise.all([sceneReady, framesReady, minTime]).then(() => {
-  real = 1;
-  const out = gsap.timeline({ delay: 0.3, onComplete: () => { loaderEl.classList.add('is-gone'); gsap.ticker.remove(odoTick); document.title = 'Robert Junior | Laminating'; } });
-  out.to(loaderEl.querySelectorAll('.loader__inner > *'), { yPercent: -60, opacity: 0, stagger: 0.06, duration: 0.7, ease: 'power3.in' })
-    .to('.loader__curtain--top', { yPercent: -100, duration: 1.1, ease: 'expo.inOut' }, '-=0.15')
-    .to('.loader__curtain--bot', { yPercent: 100, duration: 1.1, ease: 'expo.inOut' }, '<')
-    .add(() => {
-      lenis?.start();
+/* ---------- loader: a short, small hello; the hero's entrance starts once it lifts ---------- */
+{
+  const loader = document.getElementById('loader');
+  const bar = loader.querySelector('.loader__bar');
+  const imgs = [...document.querySelectorAll('.hero img')]; // SVG <image> has no .complete; its file is the same as the cup's
+  let done = 0;
+  const step = () => bar.style.setProperty('--p', Math.min(1, (++done) / (imgs.length + 1)).toFixed(2));
+  imgs.forEach((im) => (im.complete ? step() : im.addEventListener('load', step, { once: true })));
+  const ready = Promise.all([
+    document.fonts?.ready,
+    ...imgs.map((im) => (im.complete ? null : new Promise((r) => { im.addEventListener('load', r, { once: true }); im.addEventListener('error', r, { once: true }); }))),
+    new Promise((r) => setTimeout(r, reduced ? 0 : 600)), // long enough to see the cup, short enough not to annoy
+  ]);
+  const finish = () => {
+    if (loader.classList.contains('is-done')) return;
+    bar.style.setProperty('--p', 1);
+    setTimeout(() => {
+      loader.classList.add('is-done');
+      if (!reduced) document.documentElement.classList.add('motion'); // starts the hero's ink-in and photo drops
       ScrollTrigger.refresh();
-      heroIntro();
-    }, '-=0.75');
-});
+    }, reduced ? 0 : 150);
+  };
+  ready.then(finish);
+  setTimeout(finish, Math.max(0, 2500 - performance.now())); // never trap anyone: 2.5s after navigation at most
+}
+// tray drawer stops the page scrolling underneath it
+new MutationObserver(() => { if (!lenis) return; document.querySelector('#tray').hidden ? lenis.start() : lenis.stop(); }).observe(document.querySelector('#tray'), { attributes: true, attributeFilter: ['hidden'] });
 
-// safety: never trap the visitor behind the loader
-setTimeout(() => { if (!loaderEl.classList.contains('is-gone')) { real = 1; loaderEl.classList.add('is-gone'); lenis?.start(); heroIntro(); } }, 12000);
-
-if (reduced) {
-  const pill = document.createElement('button');
-  pill.type = 'button'; pill.className = 'motion-pill';
-  pill.textContent = 'Reduced motion is on · Play full experience';
-  pill.addEventListener('click', () => { try { localStorage.setItem('rj-motion', 'full'); } catch {} location.search = '?motion=full'; });
-  document.body.append(pill);
-  loaderEl.classList.add('is-gone');
-  document.querySelectorAll('.roll').forEach((el) => (el.textContent = el.dataset.roll));
+/* ---------- 2D, hand-drawn motion ----------
+   "Line boil": the drawing is pushed through a little turbulence whose seed changes ~7 times a second,
+   so the ink wobbles like frames of a hand-drawn cartoon. Paused off-screen and in hidden tabs. */
+if (!reduced) {
+  const turb = document.querySelector('#boil feTurbulence');
+  const drawn = $$('[data-boil]');
+  let seen = new Set(), seed = 1, last = 0;
+  const io = new IntersectionObserver((es) => es.forEach((e) => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target))));
+  drawn.forEach((el) => io.observe(el));
+  const tick = (t) => {
+    requestAnimationFrame(tick);
+    if (!seen.size || document.hidden || t - last < 140) return;
+    last = t;
+    seed = (seed % 4) + 1; // a short loop of "frames", like an animator's cycle
+    turb.setAttribute('seed', String(seed));
+  };
+  requestAnimationFrame(tick);
 }

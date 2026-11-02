@@ -1,3 +1,5 @@
+// The second half of the page: the Délice-style chapters from the earlier version, joined to the
+// handmade first half by the "serve" bridge (the waitress's own plate becomes the counter's first plate).
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
@@ -10,170 +12,63 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const clamp = gsap.utils.clamp(0, 1);
 
-/* ---------- odometer digits (loader + numbers) ---------- */
-export function buildOdo(el, digits) {
-  el.textContent = '';
-  const cols = [];
-  for (let i = 0; i < digits; i++) {
-    const col = document.createElement('span');
-    col.className = 'odo__col';
-    const strip = document.createElement('span');
-    strip.className = 'odo__strip';
-    // two full turns + landing digit gives the rolling "slot" feel
-    strip.innerHTML = Array.from({ length: 30 }, (_, k) => k % 10).join('<br>');
-    col.append(strip);
-    el.append(col);
-    cols.push(strip);
-  }
-  return cols;
-}
-
-/* ---------- section colour + tab title (Palmo-style) ---------- */
-function themes() {
-  const secs = $$('[data-bg]');
-  secs.forEach((sec) => {
-    ScrollTrigger.create({
-      trigger: sec,
-      start: 'top 55%',
-      end: 'bottom 55%',
-      onToggle: (self) => {
-        if (!self.isActive) return;
-        const light = sec.dataset.bg.toLowerCase() === '#f3e8d6';
-        gsap.to(document.body, { '--bg': sec.dataset.bg, '--fg': sec.dataset.fg, duration: 0.9, ease: 'power2.out', overwrite: 'auto' });
-        document.body.dataset.theme = light ? 'light' : 'dark';
-        document.body.removeAttribute('data-gold');
-        $('meta[name="theme-color"]').content = sec.dataset.bg;
-        if (sec.dataset.title) document.title = `Robert Junior | ${sec.dataset.title}`;
-      },
-    });
-  });
-}
-
-/* ---------- heading reveals ---------- */
-function headings() {
-  $$('.split').forEach((el) => {
-    SplitText.create(el, {
-      type: 'lines,words',
-      mask: 'lines',
-      linesClass: 'split-line',
-      autoSplit: true,
-      onSplit(self) {
-        return gsap.from(self.words, {
-          yPercent: 115, rotate: 5, duration: 1.1, stagger: 0.045, ease: 'expo.out',
-          scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none reverse' },
-        });
-      },
-    });
-  });
-  $$('.eyebrow:not(.hero__eyebrow):not(.seq__product .eyebrow)').forEach((el) => gsap.from(el, {
-    opacity: 0, x: -24, duration: 0.9, ease: 'power3.out',
-    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' },
-  }));
-}
-
-/* ---------- hero ---------- */
-let introDone = false;
-export function heroIntro() {
-  if (introDone || document.documentElement.classList.contains('reduced')) return;
-  introDone = true;
-  const title = $('.hero__title');
-  const split = SplitText.create(title, { type: 'lines,chars', mask: 'lines', linesClass: 'split-line' });
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  tl.from(split.chars, { yPercent: 120, rotate: 12, duration: 1.4, stagger: 0.035 })
-    .from('.hero__eyebrow', { opacity: 0, y: 20, duration: 1 }, 0.2)
-    .from('.hero__sub', { opacity: 0, y: 30, duration: 1.2 }, 0.45)
-    .from('.hero__ctas > *', { opacity: 0, y: 30, stagger: 0.08, duration: 1.1 }, 0.6)
-    .from('.nav__logo > *, .nav__links a', { autoAlpha: 0, y: -30, stagger: 0.06, duration: 1.1, clearProps: 'opacity,visibility,transform' }, 0.3)
-    .from('.nav__tray', { autoAlpha: 0, scale: 0.6, duration: 1, ease: 'back.out(2)', clearProps: 'transform' }, 0.5)
-    .from('.note', { opacity: 0, scale: 0.6, rotate: -8, stagger: 0.12, duration: 1, ease: 'back.out(2)' }, 0.9)
-    .from('.hero__scroll, .hero__drag', { opacity: 0, duration: 1 }, 1.1);
-
-  // hero exits upward with depth as the tart sequence takes over
-  gsap.to('.hero__copy', {
-    yPercent: -35, opacity: 0, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
-  });
-  gsap.to('.hero__notes', {
-    yPercent: -60, opacity: 0, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: '60% top', scrub: true },
-  });
-  return tl;
-}
-
-/* ---------- tart sequence → bridge ----------
-   0 … .56  frames scrub (Blender render)
-   .58 … .8 "Our signature" card
-   .8 … 1   bridge: the tart leaves the render, lands on the first plate of the counter,
-            while the first plate's colour circle-wipes in from the centre (Délice backsplash). */
-function sequence(seq) {
-  document.querySelector('.seq__product').inert = true;
-  const pin = $('.seq__pin');
-  const canvas = $('.seq__canvas');
-  const steps = $$('.step');
-  const meter = $('[data-seq-frame]');
-  const cuts = [0, 0.22, 0.56, 0.72];
-  const big = $$('.seq__big span');
-  const fadeOut = $$('.seq__product, .seq__steps, .seq__big, .seq__meter');
-  const tart = $('.bridge__tart');
-  const wipe = $('.bridge__wipe');
-  const plate = $('.plate--bridge');
-  const arc = $('.arc--bridge');
+/* ---------- serve: waitress → plate → the counter ----------
+   0 … .45  zoom into the plate she carries until it sits where the counter's first plate will be
+   .3 … .6  a real plate slides under the drawn one; the drawing lets go
+   .45 … .8 the gold of plate No. 1 circle-wipes out from the centre
+   .6 … 1   the tart lands on the plate and the arc title settles: identical to the counter's first frame */
+// the plate inside the drawing, as a fraction of the drawing (from the trace crop: 525–880 × 790–965 in a 1060×2150 box at 520,380)
+const PLATE = { cx: (702.5 - 520) / 1060, cy: (877.5 - 380) / 2150, w: 355 / 1060 };
+function serve() {
+  const pin = $('.serve__pin');
+  const draw = $('.serve__drawing');
+  const stage = $('.serve .bridge__stage');
+  const wipe = $('.serve .bridge__wipe');
+  const plate = $('.serve .plate--bridge');
+  const tart = $('.serve__tart');
+  const arc = $('.serve .arc--bridge');
+  const line = $('.serve__line');
+  const meta = $('.serve__meta');
   wipe.style.background = PRODUCTS[0].bg;
-  const product = gsap.timeline({ paused: true })
-    .from('.seq__product > *', { y: 50, opacity: 0, stagger: 0.08, duration: 1, ease: 'expo.out' });
-  let productOn = false, fgDark = false;
-  const io = gsap.parseEase('power3.inOut'), out = gsap.parseEase('back.out(1.6)'), sm = gsap.parseEase('power2.inOut');
-  const plateSize = () => $('.bridge__stage').offsetWidth;
+  const io = gsap.parseEase('power3.inOut'), sm = gsap.parseEase('power2.inOut');
+  const lerp = gsap.utils.interpolate;
 
-  function bridge(bp) {
-    // swap the canvas for the identical still the moment the bridge starts
-    const live = bp > 0.001;
-    canvas.style.opacity = live ? 0 : 1;
-    tart.style.opacity = live ? 1 : 0;
-    for (const el of fadeOut) { el.style.opacity = live ? 1 - clamp(bp / 0.22) : ''; el.style.translate = live ? `0 ${-40 * clamp(bp / 0.22)}px` : ''; }
-    if (live && seq) {
-      const r = seq.tartRect(); // canvas px
-      const b = canvas.getBoundingClientRect();
-      const k = b.width / canvas.clientWidth;
-      const from = { cx: b.left + r.cx * k, cy: b.top + r.cy * k, size: r.size * k };
-      const pr = $('.bridge__stage').getBoundingClientRect();
-      const to = { cx: pr.left + pr.width / 2, cy: pr.top + pr.height / 2, size: plateSize() * 1.04 };
-      const t = io(clamp((bp - 0.04) / 0.62));
-      const size = gsap.utils.interpolate(from.size, to.size, t);
-      gsap.set(tart, { x: gsap.utils.interpolate(from.cx, to.cx, t) - size / 2, y: gsap.utils.interpolate(from.cy, to.cy, t) - size / 2, width: size, rotation: -360 * t, transformOrigin: '50% 50%' });
-    }
-    gsap.set(wipe, { scale: sm(clamp((bp - 0.12) / 0.55)) });
-    gsap.set(plate, { scale: out(clamp((bp - 0.42) / 0.36)) });
-    const a = clamp((bp - 0.58) / 0.3);
+  function frame(p) {
+    const W = pin.clientWidth, H = pin.clientHeight;
+    const st = stage.getBoundingClientRect(), pr = pin.getBoundingClientRect();
+    const target = { cx: st.left - pr.left + st.width / 2, cy: st.top - pr.top + st.height / 2, size: st.width * 1.02 };
+    // start: the whole waitress standing in the frame
+    // landscape: she stands right of the line; portrait: below it
+    const portrait = W / H < 0.9;
+    const h0 = H * (portrait ? 0.7 : 0.86), w0 = h0 * (1060 / 2150);
+    const start = { w: w0, x: (portrait ? W * 0.5 : W * 0.68) - w0 * 0.46, y: H * (portrait ? 0.26 : 0.1) };
+    // end: her plate scaled to the counter plate, centred on it
+    const wEnd = target.size / PLATE.w;
+    const end = { w: wEnd, x: target.cx - PLATE.cx * wEnd, y: target.cy - PLATE.cy * wEnd * (2150 / 1060) };
+    const t = io(clamp(p / 0.45));
+    const w = lerp(start.w, end.w, t);
+    const x = lerp(start.x, end.x, t), y = lerp(start.y, end.y, t);
+    // width, not scale: the SVG re-rasterises at every size, so the zoomed lines stay crisp
+    gsap.set(draw, { x, y, width: w, opacity: 1 - clamp((p - 0.3) / 0.12) });
+    // the drawn plate's footprint right now, relative to the counter plate's centre
+    const dW = PLATE.w * w, dcx = x + PLATE.cx * w, dcy = y + PLATE.cy * w * (2150 / 1060);
+    const k = gsap.parseEase('power2.out')(clamp((p - 0.3) / 0.15));
+    const sx = dW / target.size;
+    gsap.set(plate, { x: dcx - target.cx, y: dcy - target.cy, scaleX: sx, scaleY: sx * lerp(0.46, 1, k), opacity: clamp((p - 0.28) / 0.06) });
+    gsap.set(line, { opacity: 1 - clamp(p / 0.18), y: -40 * clamp(p / 0.18) });
+    gsap.set(wipe, { scale: sm(clamp((p - 0.45) / 0.35)) });
+    gsap.set(tart, { opacity: clamp((p - 0.6) / 0.14), scale: lerp(1.2, 1, sm(clamp((p - 0.6) / 0.3))), rotation: lerp(-25, 0, sm(clamp((p - 0.6) / 0.3))) });
+    gsap.set(meta, { opacity: clamp((p - 0.84) / 0.14), y: 20 * (1 - clamp((p - 0.84) / 0.14)) });
+    const a = clamp((p - 0.7) / 0.25);
     gsap.set(arc, { opacity: a, rotation: -50 * (1 - a) });
-    const dark = bp > 0.45;
-    if (dark !== fgDark) { fgDark = dark; document.body.toggleAttribute('data-gold', dark); gsap.to(document.body, { '--fg': dark ? PRODUCTS[0].ink : '#f3e8d6', duration: 0.5, overwrite: 'auto' }); }
   }
-
-  ScrollTrigger.create({
-    trigger: '#seq', start: 'top top', end: 'bottom bottom',
-    onUpdate(self) {
-      const p = self.progress;
-      const fp = clamp(p / 0.56);
-      seq?.setProgress(fp);
-      meter.textContent = String(Math.round(fp * 95) + 1).padStart(2, '0');
-      let s = 0; cuts.forEach((c, i) => { if (fp >= c) s = i; });
-      steps.forEach((el, i) => el.classList.toggle('is-on', i === s));
-      const on = p > 0.58;
-      if (on !== productOn) { productOn = on; on ? product.play() : product.reverse(); pin.classList.toggle('is-product', on); }
-      $('.seq__product').inert = !(on && p < 0.82);
-      document.documentElement.classList.toggle('seq-product', on && p < 0.8 && self.isActive);
-      bridge(clamp((p - 0.8) / 0.2));
-    },
-  });
-  gsap.fromTo('#gl', { opacity: 1 }, { opacity: 0, ease: 'none', scrollTrigger: { trigger: '#seq', start: 'top 70%', end: 'top 5%', scrub: true } });
-  gsap.fromTo(big[0], { xPercent: -30 }, { xPercent: 20, ease: 'none', scrollTrigger: { trigger: '#seq', start: 'top bottom', end: '60% top', scrub: true } });
-  gsap.fromTo(big[1], { xPercent: 30 }, { xPercent: -20, ease: 'none', scrollTrigger: { trigger: '#seq', start: 'top bottom', end: '60% top', scrub: true } });
-  gsap.from('.seq__steps .step', { autoAlpha: 0, x: -40, stagger: 0.08, duration: 1, ease: 'expo.out', clearProps: 'opacity,visibility,transform', scrollTrigger: { trigger: '#seq', start: 'top 40%', toggleActions: 'play none none reverse' } });
+  const st = ScrollTrigger.create({ trigger: '#serve', start: 'top top', end: 'bottom bottom', onUpdate: (self) => frame(self.progress), onRefresh: (self) => frame(self.progress) });
+  frame(0);
+  addEventListener('resize', () => frame(st.progress));
 }
 
 /* ---------- counter: pinned plate carousel (Délice "promotions") ---------- */
-function counter(lenis) {
+function counter(lenis, reduced) {
   const sec = $('#counter');
   const sticky = $('[data-counter]');
   const track = $('[data-track]');
@@ -185,7 +80,7 @@ function counter(lenis) {
       <div class="item__meta">
         <h3 class="item__name">${p.name}</h3>
         <p class="item__note">${p.note}</p>
-        <button class="item__add magnetic" type="button" data-add="${p.id}" aria-label="Add ${p.name} to your tray" data-cursor="Add">Add to tray <span aria-hidden="true">+</span></button>
+        <button class="item__add" type="button" data-add="${p.id}" aria-label="Add ${p.name} to your tray">Add to tray <span aria-hidden="true">+</span></button>
       </div>
     </li>`).join('');
   splashes.innerHTML = PRODUCTS.map((p) => `<span class="splash" style="background:${p.bg}"></span>`).join('');
@@ -217,6 +112,7 @@ function counter(lenis) {
     paint(index);
   };
   paint(0);
+  if (reduced) { sticky.style.opacity = ''; return; }
 
   const st = ScrollTrigger.create({
     trigger: sec, start: 'top top', end: 'bottom bottom',
@@ -240,7 +136,9 @@ function counter(lenis) {
   // keyboard users land here even before it pins: reveal and scroll to it
   sticky.addEventListener('focusin', () => { if (sticky.style.opacity === '0') { show(true); lenis ? lenis.scrollTo(sec, { duration: 0.8 }) : sec.scrollIntoView(); } });
   // first plate's text arrives as the bridge hands over
-  gsap.from(items[0].querySelectorAll('.item__meta > *'), { y: 30, opacity: 0, stagger: 0.08, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: sec, start: 'top top', toggleActions: 'play none none reverse' } });
+  // neighbours slide in once as the counter takes over; explicit end values + clearProps, so they can never be left invisible
+  gsap.set(items.slice(1), { opacity: 0, x: 90 });
+  ScrollTrigger.create({ trigger: sec, start: 'top top', once: true, onEnter: () => gsap.to(items.slice(1), { opacity: 1, x: 0, stagger: 0.06, duration: 0.9, ease: 'power3.out', clearProps: 'opacity,transform' }) });
   gsap.from('.counter__index, .counter__hint', { opacity: 0, y: 20, duration: 0.8, scrollTrigger: { trigger: sec, start: 'top top', toggleActions: 'play none none reverse' } });
   // keyboard: tabbing to an off-screen plate scrolls the carousel to it
   track.addEventListener('focusin', (e) => {
@@ -278,7 +176,6 @@ function parallax() {
   });
   // round photos pop in like plates set down on a table
   $$('.floater').forEach((el) => gsap.from(el.firstElementChild, { scale: 1.35, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
-  gsap.from('.floaters .floater', { scale: 0, stagger: 0.08, duration: 1.2, ease: 'back.out(1.6)', scrollTrigger: { trigger: '.story', start: 'top 70%' } });
   gsap.fromTo('.arch__frame img', { yPercent: -12 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.arch', start: 'top bottom', end: 'bottom top', scrub: true } });
   gsap.fromTo('.classic__wide img', { scale: 1.2 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.classic__gallery', start: 'top bottom', end: 'bottom top', scrub: true } });
 }
@@ -328,7 +225,7 @@ const POSTS = [
 ];
 function posts(reduced) {
   const track = $('[data-ig]');
-  track.innerHTML = POSTS.map(([id, img, cap, date]) => `<a class="ig__post" href="https://www.instagram.com/robertjuniorpatisserie/p/${id}/" target="_blank" rel="noopener" data-cursor="View"><span class="ig__img"><img src="img/${img}.webp" alt="" loading="lazy" width="320" height="320"></span><span class="ig__cap">${cap}</span><span class="ig__date"><span>${date}</span><span>View post ↗</span></span></a>`).join('');
+  track.innerHTML = POSTS.map(([id, img, cap, date]) => `<a class="ig__post" href="https://www.instagram.com/robertjuniorpatisserie/p/${id}/" target="_blank" rel="noopener"><span class="ig__img"><img src="img/${img}.webp" alt="" loading="lazy" width="320" height="320"></span><span class="ig__cap">${cap}</span><span class="ig__date"><span>${date}</span><span>View post ↗</span></span></a>`).join('');
   const rail = $('.ig');
   const bar = $('[data-rail-bar]');
   const upd = () => {
@@ -354,8 +251,8 @@ function discs() {
   $$('.ccard .arc').forEach((el, i) => gsap.fromTo(el, { rotation: -60 }, { rotation: 30, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } }));
   gsap.from('.ccard__disc', { scale: 0.5, rotate: -40, opacity: 0, stagger: 0.15, duration: 1.4, ease: 'back.out(1.4)', scrollTrigger: { trigger: '.cta__cards', start: 'top 75%' } });
   gsap.from('.ccard .btn', { y: 40, opacity: 0, stagger: 0.15, duration: 1.2, ease: 'expo.out', clearProps: 'transform', scrollTrigger: { trigger: '.cta__cards', start: 'top 60%' } });
-  gsap.to('.stamp__ring', { rotation: 360, duration: 30, ease: 'none', repeat: -1 });
-  gsap.fromTo('.stamp', { rotate: -90, scale: 0.6 }, { rotate: 0, scale: 1, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'top 30%', scrub: true } });
+  gsap.to('.seal__ring', { rotation: 360, duration: 30, ease: 'none', repeat: -1 });
+  gsap.fromTo('.seal', { rotate: -90, scale: 0.6 }, { rotate: 0, scale: 1, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'top 30%', scrub: true } });
 }
 
 /* ---------- came for / stayed for slots ---------- */
@@ -386,84 +283,21 @@ function slots() {
   gsap.from('.posts__title > span', { opacity: 0, yPercent: 60, rotate: 2.5, skewX: -5, stagger: 0.1, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '.posts__title', start: 'top 80%' } });
 }
 
-/* ---------- nav, mobile bar ---------- */
-function chrome(lenis) {
-  const nav = $('#nav');
-  const mbar = $('.mbar');
-  let last = 0;
-  const onScroll = (y) => {
-    const down = y > last && y > innerHeight * 0.6;
-    nav.classList.toggle('is-hidden', down && !$('#tray:not([hidden])'));
-    mbar.classList.toggle('is-on', y > innerHeight * 0.8 && y < document.body.scrollHeight - innerHeight * 1.6);
-    last = y;
-  };
-  lenis ? lenis.on('scroll', ({ scroll }) => onScroll(scroll)) : addEventListener('scroll', () => onScroll(scrollY), { passive: true });
-  // anchor links through Lenis
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a || a.hasAttribute('data-close-tray')) return;
-    const t = $(a.getAttribute('href'));
-    if (!t) return;
-    e.preventDefault();
-    lenis ? lenis.scrollTo(t, { duration: 1.6, easing: (x) => 1 - Math.pow(1 - x, 4) }) : t.scrollIntoView();
-    if (a.getAttribute('href') === '#counter') setTimeout(() => $('[data-rail]').focus({ preventScroll: true }), 1700);
-  });
-}
 
-/* ---------- cursor + magnetic ---------- */
-function pointerFx() {
-  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  document.documentElement.classList.add('has-cursor');
-  const c = $('.cursor');
-  const label = $('[data-cursor-label]');
-  const xTo = gsap.quickTo(c, 'x', { duration: 0.35, ease: 'power3' });
-  const yTo = gsap.quickTo(c, 'y', { duration: 0.35, ease: 'power3' });
-  addEventListener('pointermove', (e) => {
-    xTo(e.clientX); yTo(e.clientY);
-    const t = e.target.closest?.('[data-cursor], [data-rail]');
-    let text = t?.dataset.cursor || (t?.hasAttribute('data-rail') ? 'Drag' : '');
-    if (!text && document.documentElement.classList.contains('over-pastry')) text = 'Flick';
-    c.classList.toggle('is-big', !!text);
-    label.textContent = text;
-  }, { passive: true });
-
-  $$('.magnetic').forEach((el) => {
-    const x = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'elastic.out(1, 0.4)' });
-    const y = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'elastic.out(1, 0.4)' });
-    el.addEventListener('pointermove', (e) => {
-      const r = el.getBoundingClientRect();
-      x((e.clientX - r.left - r.width / 2) * 0.3);
-      y((e.clientY - r.top - r.height / 2) * 0.4);
-    });
-    el.addEventListener('pointerleave', () => { x(0); y(0); });
-  });
-}
-
-/* ---------- scroll progress ---------- */
-function progress() {
-  gsap.to('[data-progress]', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: 0.3 } });
-}
-
-export function initMotion({ lenis, seq, reduced }) {
+export function initSecondHalf({ lenis, reduced }) {
   initArcs();
-  themes();
-  chrome(lenis);
-  counter(lenis);
+  counter(lenis, reduced);
   posts(reduced);
   initBlobs({ lenis, reduced });
   if (reduced) return;
   document.documentElement.classList.add('fx-ready');
-  headings();
-  progress();
-  sequence(seq);
-  // split text only once the display serif has loaded, or lines break in the wrong places
+  serve();
   (document.fonts?.ready || Promise.resolve()).then(() => { effects(); ScrollTrigger.refresh(); });
   parallax();
   band(lenis);
   badges();
   slots();
   discs();
-  pointerFx();
 }
 
-export { ScrollTrigger, gsap };
+export { gsap, ScrollTrigger };

@@ -51,9 +51,9 @@ export function initBlobs({ lenis, reduced }) {
 
 // Curved text (Délice curvedText): circle path through the SVG's viewBox so text sits on a ring.
 export function initArcs() {
-  document.querySelectorAll('svg.arc, svg.stamp__ring').forEach((svg) => {
+  document.querySelectorAll('svg.arc, svg.seal__ring').forEach((svg) => {
     const path = svg.querySelector('path');
-    const full = svg.classList.contains('stamp__ring');
+    const full = svg.classList.contains('seal__ring');
     const r = full ? 262 : 262; // viewBox 600 → ring radius
     const cx = 300, cy = 300;
     // start at the left so startOffset 25% centres the text at the top of the ring
