@@ -54,11 +54,11 @@ function serve() {
     const dW = PLATE.w * w, dcx = x + PLATE.cx * w, dcy = y + PLATE.cy * w * (2150 / 1060);
     const k = gsap.parseEase('power2.out')(clamp((p - 0.3) / 0.15));
     const sx = dW / target.size;
-    gsap.set(plate, { x: dcx - target.cx, y: dcy - target.cy, scaleX: sx, scaleY: sx * lerp(0.46, 1, k), opacity: clamp((p - 0.28) / 0.06) });
+    gsap.set(plate, { x: dcx - target.cx, y: dcy - target.cy, scaleX: sx, scaleY: sx * lerp(0.46, 1, k), opacity: clamp((p - 0.28) / 0.025) });
     gsap.set(line, { opacity: 1 - clamp(p / 0.18), y: -40 * clamp(p / 0.18) });
     gsap.set(wipe, { scale: sm(clamp((p - 0.45) / 0.35)) });
-    gsap.set(tart, { opacity: clamp((p - 0.6) / 0.14), scale: lerp(1.2, 1, sm(clamp((p - 0.6) / 0.3))), rotation: lerp(-25, 0, sm(clamp((p - 0.6) / 0.3))) });
-    gsap.set(meta, { opacity: clamp((p - 0.84) / 0.14), y: 20 * (1 - clamp((p - 0.84) / 0.14)) });
+    gsap.set(tart, { opacity: clamp((p - 0.6) / 0.07), scale: lerp(1.2, 1, sm(clamp((p - 0.6) / 0.3))), rotation: lerp(-25, 0, sm(clamp((p - 0.6) / 0.3))) });
+    gsap.set(meta, { opacity: clamp((p - 0.84) / 0.14), y: 20 * (1 - clamp((p - 0.84) / 0.14)), pointerEvents: p > 0.84 ? 'auto' : 'none' });
     const a = clamp((p - 0.7) / 0.25);
     gsap.set(arc, { opacity: a, rotation: -50 * (1 - a) });
   }
@@ -139,7 +139,7 @@ function counter(lenis, reduced) {
   // neighbours slide in once as the counter takes over; explicit end values + clearProps, so they can never be left invisible
   gsap.set(items.slice(1), { opacity: 0, x: 90 });
   ScrollTrigger.create({ trigger: sec, start: 'top top', once: true, onEnter: () => gsap.to(items.slice(1), { opacity: 1, x: 0, stagger: 0.06, duration: 0.9, ease: 'power3.out', clearProps: 'opacity,transform' }) });
-  gsap.from('.counter__index, .counter__hint', { opacity: 0, y: 20, duration: 0.8, scrollTrigger: { trigger: sec, start: 'top top', toggleActions: 'play none none reverse' } });
+  gsap.from('.counter__index, .counter__hint, .counter__doodle', { opacity: 0, y: 20, duration: 0.8, scrollTrigger: { trigger: sec, start: 'top top', toggleActions: 'play none none reverse' } });
   // keyboard: tabbing to an off-screen plate scrolls the carousel to it
   track.addEventListener('focusin', (e) => {
     const i = items.indexOf(e.target.closest('[data-item]'));

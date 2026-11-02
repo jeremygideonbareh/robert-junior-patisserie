@@ -60,6 +60,7 @@ export function add(id) {
 
 function open() {
   lastFocus = document.activeElement;
+  $('[data-toast]').classList.remove('is-on'); // the tray itself shows what was added
   $('#tray').hidden = false;
   document.documentElement.style.overflow = 'hidden';
   setTimeout(() => $('.tray__x').focus(), 50);
